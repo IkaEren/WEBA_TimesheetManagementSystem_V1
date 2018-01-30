@@ -50,6 +50,73 @@ namespace TimeSheetManagementSystem.Data
             {
                 entity.Relational().TableName = entity.DisplayName();
             }
+            //----- Defining Course Entity - Start --------------
+
+            //Make the CourseId a  Primary Key
+            modelBuilder.Entity<Course>()
+            .HasKey(input => input.CourseId)
+            .HasName("PrimaryKey_CourseId");
+
+            //Defining general properties of CourseId
+            modelBuilder.Entity<Course>()
+            .Property(input => input.CourseId)
+            .HasColumnName("CourseId")
+            .HasColumnType("int")
+            .UseSqlServerIdentityColumn()
+            .ValueGeneratedOnAdd()
+            .IsRequired();
+
+            //Defining general properties of CourseName
+            modelBuilder.Entity<Course>()
+                .Property(input => input.CourseName)
+                .HasColumnName("CourseName")
+                .HasColumnType("VARCHAR(100)")
+                .IsRequired();
+
+            //Defining general properties of CourseAbbreviation
+            modelBuilder.Entity<Course>()
+            .Property(input => input.CourseAbbreviation)
+            .HasColumnName("CourseAbbreviation")
+            .HasColumnType("VARCHAR(10)")
+            .IsRequired();
+
+            modelBuilder.Entity<Course>()
+            .Property(input => input.CreatedAt)
+            .HasDefaultValueSql("GetDate()");
+
+            modelBuilder.Entity<Course>()
+            .Property(input => input.UpdatedAt)
+            .HasDefaultValueSql("GetDate()");
+
+            modelBuilder.Entity<Course>()
+            .Property(input => input.DeletedAt)
+            .IsRequired(false);
+
+            //Enforce unique constraint on Course Abbreviation
+            modelBuilder.Entity<Course>()
+            .HasIndex(input => input.CourseAbbreviation).IsUnique()
+            .HasName("Course_CourseAbbreviation_UniqueConstraint");
+            //Setting up relationship with the UserInfo entity
+            modelBuilder.Entity<Course>()
+              .HasOne(input => input.CreatedBy)
+                .WithMany()
+                .HasForeignKey(input => input.CreatedById)
+                .OnDelete(DeleteBehavior.Restrict)
+                .IsRequired();
+            modelBuilder.Entity<Course>()
+              .HasOne(input => input.DeletedBy)
+                .WithMany()
+                .HasForeignKey(input => input.CreatedById)
+                .OnDelete(DeleteBehavior.Restrict)
+                .IsRequired();
+            modelBuilder.Entity<Course>()
+              .HasOne(input => input.UpdatedBy)
+                .WithMany()
+                .HasForeignKey(input => input.CreatedById)
+                .OnDelete(DeleteBehavior.Restrict)
+                .IsRequired();
+            //----------- Defining Course Entity - End --------------
+
             //----------- Defining SessionSynopsis Entity - Start --------------
             //Make the SessionSynopsisId as  Primary Key 
             modelBuilder.Entity<SessionSynopsis>()

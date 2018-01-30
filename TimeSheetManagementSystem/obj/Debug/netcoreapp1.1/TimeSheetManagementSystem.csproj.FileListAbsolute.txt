@@ -97,3 +97,14 @@ D:\WEBA\assignment\TimesheetManagementSystem_V1\TimeSheetManagementSystem\obj\De
 D:\WEBA\assignment\TimesheetManagementSystem_V1\TimeSheetManagementSystem\obj\Debug\netcoreapp1.1\TimeSheetManagementSystem.AssemblyInfo.cs
 D:\WEBA\assignment\TimesheetManagementSystem_V1\TimeSheetManagementSystem\obj\Debug\netcoreapp1.1\TimeSheetManagementSystem.dll
 D:\WEBA\assignment\TimesheetManagementSystem_V1\TimeSheetManagementSystem\obj\Debug\netcoreapp1.1\TimeSheetManagementSystem.pdb
+H:\Shuvi\School_Y2Sem2\WEBA\TimesheetManagementSystem_V1\TimeSheetManagementSystem\bin\Debug\netcoreapp1.1\TimeSheetManagementSystem.deps.json
+H:\Shuvi\School_Y2Sem2\WEBA\TimesheetManagementSystem_V1\TimeSheetManagementSystem\bin\Debug\netcoreapp1.1\TimeSheetManagementSystem.runtimeconfig.json
+H:\Shuvi\School_Y2Sem2\WEBA\TimesheetManagementSystem_V1\TimeSheetManagementSystem\bin\Debug\netcoreapp1.1\TimeSheetManagementSystem.runtimeconfig.dev.json
+H:\Shuvi\School_Y2Sem2\WEBA\TimesheetManagementSystem_V1\TimeSheetManagementSystem\bin\Debug\netcoreapp1.1\TimeSheetManagementSystem.dll
+H:\Shuvi\School_Y2Sem2\WEBA\TimesheetManagementSystem_V1\TimeSheetManagementSystem\bin\Debug\netcoreapp1.1\TimeSheetManagementSystem.pdb
+H:\Shuvi\School_Y2Sem2\WEBA\TimesheetManagementSystem_V1\TimeSheetManagementSystem\obj\Debug\netcoreapp1.1\TimeSheetManagementSystem.csprojResolveAssemblyReference.cache
+H:\Shuvi\School_Y2Sem2\WEBA\TimesheetManagementSystem_V1\TimeSheetManagementSystem\obj\Debug\netcoreapp1.1\TimeSheetManagementSystem.csproj.CoreCompileInputs.cache
+H:\Shuvi\School_Y2Sem2\WEBA\TimesheetManagementSystem_V1\TimeSheetManagementSystem\obj\Debug\netcoreapp1.1\TimeSheetManagementSystem.AssemblyInfoInputs.cache
+H:\Shuvi\School_Y2Sem2\WEBA\TimesheetManagementSystem_V1\TimeSheetManagementSystem\obj\Debug\netcoreapp1.1\TimeSheetManagementSystem.AssemblyInfo.cs
+H:\Shuvi\School_Y2Sem2\WEBA\TimesheetManagementSystem_V1\TimeSheetManagementSystem\obj\Debug\netcoreapp1.1\TimeSheetManagementSystem.dll
+H:\Shuvi\School_Y2Sem2\WEBA\TimesheetManagementSystem_V1\TimeSheetManagementSystem\obj\Debug\netcoreapp1.1\TimeSheetManagementSystem.pdb
