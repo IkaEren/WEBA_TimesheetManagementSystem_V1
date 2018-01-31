@@ -1,0 +1,47 @@
+@model TimeSheetManagementSystem.Models.SessionSynopsis
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>SessionSynopsis</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <input type="hidden" asp-for="SessionSynopsisId" />
+        <dt>
+            @Html.DisplayNameFor(model => model.SessionSynopsisName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.SessionSynopsisName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.IsVisible)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.IsVisible)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.CreatedBy)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.CreatedBy.Email)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.UpdatedBy)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.UpdatedBy.Email)
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            <a asp-action="Index">Back to List</a>
+        </div>
+    </form>
+</div>

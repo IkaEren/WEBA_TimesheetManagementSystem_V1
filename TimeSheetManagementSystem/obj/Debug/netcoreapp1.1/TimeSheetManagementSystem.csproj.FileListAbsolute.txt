@@ -123,3 +123,7 @@ D:\WEBA\WEBA_TimesheetManagementSystem_V1\TimeSheetManagementSystem\bin\Debug\ne
 D:\WEBA\WEBA_TimesheetManagementSystem_V1\TimeSheetManagementSystem\bin\Debug\netcoreapp1.1\Migrations\setup_AspNetUsers_Update_trigger.sql
 D:\WEBA\WEBA_TimesheetManagementSystem_V1\TimeSheetManagementSystem\bin\Debug\netcoreapp1.1\Migrations\setup_convert_HHMM_to_minutes.sql
 D:\WEBA\WEBA_TimesheetManagementSystem_V1\TimeSheetManagementSystem\bin\Debug\netcoreapp1.1\Migrations\setup_convert_minutes_to_HHMM.sql
+H:\Shuvi\School_Y2Sem2\WEBA\TimesheetManagementSystem_V1\TimeSheetManagementSystem\bin\Debug\netcoreapp1.1\Migrations\setup_AspNetUsers_Insert_trigger.sql
+H:\Shuvi\School_Y2Sem2\WEBA\TimesheetManagementSystem_V1\TimeSheetManagementSystem\bin\Debug\netcoreapp1.1\Migrations\setup_AspNetUsers_Update_trigger.sql
+H:\Shuvi\School_Y2Sem2\WEBA\TimesheetManagementSystem_V1\TimeSheetManagementSystem\bin\Debug\netcoreapp1.1\Migrations\setup_convert_HHMM_to_minutes.sql
+H:\Shuvi\School_Y2Sem2\WEBA\TimesheetManagementSystem_V1\TimeSheetManagementSystem\bin\Debug\netcoreapp1.1\Migrations\setup_convert_minutes_to_HHMM.sql

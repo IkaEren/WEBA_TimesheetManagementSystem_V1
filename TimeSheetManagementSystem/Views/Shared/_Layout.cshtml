@@ -51,11 +51,14 @@
                                     Administration <b class="caret"></b>
                                 </a>
                                 <ul class="dropdown-menu" role="menu" aria-labelledby="drop2">
-                                    <li><a asp-controller="CustomerAccounts" asp-action="ManageCustomerAccounts">Manage customer account</a></li>
-                                    <li><a asp-controller="CustomerAccounts" asp-action="CreateCustomerAccount">Create customer account</a></li>
+                                    <li><a asp-controller="CustomerAccounts" asp-action="Index">Manage customer account</a></li>
+                                    <li><a asp-controller="CustomerAccounts" asp-action="Create">Create customer account</a></li>
                                     <li class="divider"></li>
-                                    <li><a asp-controller="SessionSynopses" asp-action="Index">Manage session synopsis</a></li>
-                                    <li><a asp-controller="SessionSynopses" asp-action="Create">Create session synopsis</a></li>
+                                    <li><a asp-controller="SessionSynopsis" asp-action="Index">Manage session synopsis</a></li>
+                                    <li><a asp-controller="SessionSynopsis" asp-action="Create">Create session synopsis</a></li>
+                                    <li class="divider"></li>
+                                    <li><a asp-controller="Courses" asp-action="Index">Manage Courses</a></li>
+                                    <li><a asp-controller="Courses" asp-action="Create">Create Courses</a></li>
                                 </ul>
                             </li>
 

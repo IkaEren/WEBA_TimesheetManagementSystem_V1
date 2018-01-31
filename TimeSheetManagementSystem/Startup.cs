@@ -108,10 +108,10 @@ namespace TimeSheetManagementSystem
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
-            
-            
-           
-           //app.SeedData();//Remember to comment out this command if the database is not empty.
+
+
+
+            //app.SeedData();//Remember to comment out this command if the database is not empty.
         }
     }
 }

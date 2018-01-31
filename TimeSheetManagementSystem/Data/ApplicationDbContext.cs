@@ -37,11 +37,12 @@ namespace TimeSheetManagementSystem.Data
 
         }
 
-
+        
+     
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-       //optionsBuilder.UseSqlServer(@"Server=ILOVECODE\SQLEXPRESS;database=TimeSheetManagementSystemDB_v2;Trusted_Connection=True;MultipleActiveResultSets=True");
-        optionsBuilder.UseSqlServer(@"Data Source=ikaeren.database.windows.net;Initial Catalog=InternshipManagementSystemDB;Persist Security Info=True;User ID=ikaeren;Password=Zchia0801");
+        //optionsBuilder.UseSqlServer(@"Server=SHIZUKA-PC\SQLEXPRESS;database=InternshipManagementSystemDB;Trusted_Connection=True;MultipleActiveResultSets=True");
+        optionsBuilder.UseSqlServer(@"Data Source=ikaeren.database.windows.net;Initial Catalog=TimesheetManagementSystemDB;Integrated Security=False;User ID=ikaeren;Password=Zchia0801;Connect Timeout=30;Encrypt=False;TrustServerCertificate=True;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
              }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

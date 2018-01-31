@@ -594,7 +594,6 @@ namespace TimeSheetManagementSystem.Migrations
                 table: "UserInfo",
                 column: "LoginUserName",
                 unique: true);
-
             migrationBuilder.Sql(File.ReadAllText("migrations/setup_AspNetUsers_Insert_trigger.sql"));
             migrationBuilder.Sql(File.ReadAllText("migrations/setup_AspNetUsers_Update_trigger.sql"));
             migrationBuilder.Sql(File.ReadAllText("migrations/setup_convert_HHMM_to_minutes.sql"));
