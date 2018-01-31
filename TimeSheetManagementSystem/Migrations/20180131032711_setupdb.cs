@@ -599,7 +599,6 @@ namespace TimeSheetManagementSystem.Migrations
             migrationBuilder.Sql(File.ReadAllText("migrations/setup_AspNetUsers_Update_trigger.sql"));
             migrationBuilder.Sql(File.ReadAllText("migrations/setup_convert_HHMM_to_minutes.sql"));
             migrationBuilder.Sql(File.ReadAllText("migrations/setup_convert_minutes_to_HHMM.sql"));
-
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
