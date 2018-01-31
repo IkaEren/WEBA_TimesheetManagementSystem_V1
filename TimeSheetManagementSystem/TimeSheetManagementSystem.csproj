@@ -1316,5 +1316,19 @@
   <ItemGroup>
     <TypeScriptCompile Include="wwwroot\lib\moment\moment.d.ts" />
   </ItemGroup>
+  <ItemGroup>
+    <None Update="Migrations\setup_AspNetUsers_Insert_trigger.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Migrations\setup_AspNetUsers_Update_trigger.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Migrations\setup_convert_HHMM_to_minutes.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Migrations\setup_convert_minutes_to_HHMM.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 
 </Project>
