@@ -7,16 +7,20 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using TimeSheetManagementSystem.Data;
 using TimeSheetManagementSystem.Models;
+using TimeSheetManagementSystem.Controllers;
+using Microsoft.AspNetCore.Identity;
 
 namespace TimeSheetManagementSystem.Controllers
 {
     public class SessionSynopsisController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public SessionSynopsisController(ApplicationDbContext context)
+        public SessionSynopsisController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
-            _context = context;    
+            _context = context;
+            _userManager = userManager;
         }
 
         // GET: SessionSynopsis
@@ -47,10 +51,13 @@ namespace TimeSheetManagementSystem.Controllers
         }
 
         // GET: SessionSynopsis/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            ViewData["CreatedById"] = new SelectList(_context.UserInfo, "UserInfoId", "Email");
-            ViewData["UpdatedById"] = new SelectList(_context.UserInfo, "UserInfoId", "Email");
+            var user = await GetCurrentUserAsync();
+            ViewData["CreatedById"] = new SelectList(user.Email, "Id", "Email");
+            ViewData["UpdatedById"] = new SelectList(user.Email, "Id", "Email");
+            //ViewData["CreatedById"] = new SelectList(_context.UserInfo, "UserInfoId", "Email");
+            //ViewData["UpdatedById"] = new SelectList(_context.UserInfo, "UserInfoId", "Email");
             return View();
         }
 
@@ -61,20 +68,25 @@ namespace TimeSheetManagementSystem.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("SessionSynopsisId,SessionSynopsisName,CreatedById,UpdatedById,IsVisible")] SessionSynopsis sessionSynopsis)
         {
+            var user = await GetCurrentUserAsync();
+
             if (ModelState.IsValid)
             {
                 _context.Add(sessionSynopsis);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            ViewData["CreatedById"] = new SelectList(_context.UserInfo, "UserInfoId", "Email", sessionSynopsis.CreatedById);
-            ViewData["UpdatedById"] = new SelectList(_context.UserInfo, "UserInfoId", "Email", sessionSynopsis.UpdatedById);
+            //ViewData["CreatedById"] = new SelectList(_context.UserInfo, "UserInfoId", "Email", sessionSynopsis.CreatedById);
+            //ViewData["UpdatedById"] = new SelectList(_context.UserInfo, "UserInfoId", "Email", sessionSynopsis.UpdatedById);
+            //ViewData["CreatedById"] = user;
+            //ViewData["UpdatedById"] = user;
             return View(sessionSynopsis);
         }
 
         // GET: SessionSynopsis/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            var user = await GetCurrentUserAsync();
             if (id == null)
             {
                 return NotFound();
@@ -85,8 +97,9 @@ namespace TimeSheetManagementSystem.Controllers
             {
                 return NotFound();
             }
-            ViewData["CreatedById"] = new SelectList(_context.UserInfo, "UserInfoId", "Email", sessionSynopsis.CreatedById);
-            ViewData["UpdatedById"] = new SelectList(_context.UserInfo, "UserInfoId", "Email", sessionSynopsis.UpdatedById);
+            //ViewData["CreatedById"] = new SelectList(_context.UserInfo, "UserInfoId", "Email", sessionSynopsis.CreatedById);
+            //ViewData["UpdatedById"] = new SelectList(_context.UserInfo, "UserInfoId", "Email", sessionSynopsis.UpdatedById);
+            ViewData["UpdatedById"] = user;
             return View(sessionSynopsis);
         }
 
@@ -161,6 +174,12 @@ namespace TimeSheetManagementSystem.Controllers
         private bool SessionSynopsisExists(int id)
         {
             return _context.SessionSynopses.Any(e => e.SessionSynopsisId == id);
+        }
+
+        // Method to get current logged in user ID with the user manager.  
+        private Task<ApplicationUser> GetCurrentUserAsync()
+        {
+            return _userManager.GetUserAsync(HttpContext.User);
         }
     }
 }

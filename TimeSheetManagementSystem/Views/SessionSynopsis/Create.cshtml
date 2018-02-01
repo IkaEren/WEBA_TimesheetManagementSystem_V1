@@ -1,4 +1,8 @@
+@using Microsoft.AspNetCore.Identity
+@using TimeSheetManagementSystem.Models
+@using System.Security.Claims 
 @model TimeSheetManagementSystem.Models.SessionSynopsis
+@inject UserManager<ApplicationUser> UserManager
 
 @{
     ViewData["Title"] = "Create";
