@@ -25,13 +25,13 @@
         <div class="form-group">
             <label asp-for="CreatedById" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <select asp-for="CreatedById" class ="form-control" asp-items="ViewBag.CreatedById"></select>
+                <input type="text" class ="form-control" value="@ViewBag.Email" readonly />
             </div>
         </div>
         <div class="form-group">
             <label asp-for="UpdatedById" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <select asp-for="UpdatedById" class ="form-control" asp-items="ViewBag.UpdatedById"></select>
+                <input type="text" class ="form-control" value="@ViewBag.Email" readonly/>
             </div>
         </div>
         <div class="form-group">
