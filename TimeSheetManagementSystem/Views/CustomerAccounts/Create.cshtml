@@ -33,37 +33,44 @@
                 </div>
             </div>
         </div>
-        <div class="form-group">
-            <label asp-for="CreatedAt" class="col-md-2 control-label"></label>
+        @*<div class="form-group">
+            <label asp-for="CreatedAt" class="col-md-2 control-label">Customer Start Date</label>
             <div class="col-md-10">
                 <input asp-for="CreatedAt" class="form-control" />
                 <span asp-validation-for="CreatedAt" class="text-danger"></span>
             </div>
-        </div>
-        <div class="form-group">
+        </div>*@
+        @*<div class="form-group">
             <label asp-for="CreatedById" class="col-md-2 control-label"></label>
             <div class="col-md-10">
                 <select asp-for="CreatedById" class ="form-control" asp-items="ViewBag.CreatedById"></select>
             </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="UpdatedAt" class="col-md-2 control-label"></label>
+        </div>*@
+        @*<div class="form-group">
+            <label asp-for="UpdatedAt" class="col-md-2 control-label">Customer End Date</label>
             <div class="col-md-10">
                 <input asp-for="UpdatedAt" class="form-control" />
                 <span asp-validation-for="UpdatedAt" class="text-danger"></span>
             </div>
-        </div>
-        <div class="form-group">
+        </div>*@
+        @*<div class="form-group">
             <label asp-for="UpdatedById" class="col-md-2 control-label"></label>
             <div class="col-md-10">
                 <select asp-for="UpdatedById" class ="form-control" asp-items="ViewBag.UpdatedById"></select>
             </div>
-        </div>
+        </div>*@
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <input type="submit" value="Create" class="btn btn-default" />
             </div>
         </div>
+        @*<div class="form-group">
+            <label asp-for="RatePerHour" class="col-md-2 control-label">Rate per hour</label>
+            <div class="col-md-10">
+                <input asp-for="RatePerHour" class="form-control" />
+                <span asp-validation-for="RatePerHour" class="text-danger"></span>
+            </div>
+        </div>*@
     </div>
 </form>
 

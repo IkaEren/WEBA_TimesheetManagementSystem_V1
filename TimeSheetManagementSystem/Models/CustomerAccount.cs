@@ -31,7 +31,6 @@ namespace TimeSheetManagementSystem.Models
         public DateTime UpdatedAt { get; set; }
         public int UpdatedById { get; set; }
         public UserInfo UpdatedBy { get; set; }
-        
         public List<InstructorAccount> InstructorAccounts { get; set; }
         public List<AccountDetail> AccountDetails { get; set; }
         public List<AccountRate> AccountRates { get; set; }
