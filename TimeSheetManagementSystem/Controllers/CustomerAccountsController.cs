@@ -132,8 +132,8 @@ namespace TimeSheetManagementSystem.Controllers
             {
                 return NotFound();
             }
-            ViewData["CreatedById"] = new SelectList(_context.UserInfo, "UserInfoId", "Email", customerAccount.CreatedById);
-            ViewData["UpdatedById"] = new SelectList(_context.UserInfo, "UserInfoId", "Email", customerAccount.UpdatedById);
+            //ViewData["CreatedById"] = new SelectList(_context.UserInfo, "UserInfoId", "Email", customerAccount.CreatedById);
+            //ViewData["UpdatedById"] = new SelectList(_context.UserInfo, "UserInfoId", "Email", customerAccount.UpdatedById);
             return View(customerAccount);
         }
 
@@ -165,7 +165,7 @@ namespace TimeSheetManagementSystem.Controllers
                         updateCustomer.UpdatedAt = timeNow;
                         await _context.SaveChangesAsync();
                     }
-                    catch (DbUpdateException ex)
+                    catch (DbUpdateException)
                     {
                         ModelState.AddModelError("", "Unable to save changes. " +
                             "Try again, and if the problem persists, " +
