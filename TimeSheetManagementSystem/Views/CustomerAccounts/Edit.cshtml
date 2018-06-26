@@ -76,5 +76,13 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-
+    <script>
+        $(function () {
+            $(document).ready(function () {
+                $(function () {
+                    $('#UpdatedAt').datetimepicker();
+                });
+            });
+        });
+    </script>
 }

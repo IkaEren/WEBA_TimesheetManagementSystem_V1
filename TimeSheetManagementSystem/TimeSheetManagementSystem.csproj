@@ -34,7 +34,7 @@
     <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="1.0.0" />
     <DotNetCliToolReference Include="Microsoft.Extensions.SecretManager.Tools" Version="1.0.0" />
   </ItemGroup>
-  <ItemGroup>
+  <!--<ItemGroup>
     <None Include="wwwroot\js\site.js" />
     <None Include="wwwroot\js\site.min.js" />
     <None Include="wwwroot\lib\bootstrap-datepicker\.editorconfig" />
@@ -1312,7 +1312,7 @@
     <None Include="wwwroot\lib\noty\test\vendor\jquery-slim.min.js" />
     <None Include="wwwroot\lib\noty\test\vendor\qunit.js" />
     <None Include="wwwroot\lib\noty\webpack.config.js" />
-  </ItemGroup>
+  </ItemGroup>-->
   <ItemGroup>
     <TypeScriptCompile Include="wwwroot\lib\moment\moment.d.ts" />
   </ItemGroup>
