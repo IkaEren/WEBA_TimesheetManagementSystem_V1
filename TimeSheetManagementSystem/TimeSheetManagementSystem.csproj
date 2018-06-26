@@ -1330,5 +1330,8 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="ViewModels\CustomerAccountsViewModel\" />
+  </ItemGroup>
 
 </Project>
