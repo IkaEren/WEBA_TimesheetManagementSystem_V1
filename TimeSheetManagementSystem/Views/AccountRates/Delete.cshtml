@@ -1,0 +1,47 @@
+@model TimeSheetManagementSystem.Models.AccountRate
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>AccountRate</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <input type="hidden" asp-for="AccountRateId" />
+        <dt>
+            @Html.DisplayNameFor(model => model.RatePerHour)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.RatePerHour)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.EffectiveStartDate)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.EffectiveStartDate)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.EffectiveEndDate)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.EffectiveEndDate)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.CustomerAccount)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.CustomerAccount.AccountName)
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            <a asp-action="Index">Back to List</a>
+        </div>
+    </form>
+</div>

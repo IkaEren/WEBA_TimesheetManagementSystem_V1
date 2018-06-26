@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "noEmit": true,
+    "lib": ["es2016", "dom"]  // only necessary if you need new stuff like promises
+  },
+  "exclude": [
+    "wwwroot/lib/" //add folders that contain javascript libraries here
+  ],
+  "typeAcquisition": {  
+    "enable": true,
+    "include": [
+      "jquery"  // add any libraries excluded in the folders above here
+    ]
+  }
+}

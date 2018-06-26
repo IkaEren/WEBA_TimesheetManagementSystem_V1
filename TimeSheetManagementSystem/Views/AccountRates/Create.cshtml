@@ -1,0 +1,55 @@
+@model TimeSheetManagementSystem.Models.AccountRate
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h2>Create</h2>
+
+<form asp-action="Create">
+    <div class="form-horizontal">
+        <h4>AccountRate</h4>
+        <hr />
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group">
+            <label asp-for="CustomerAccountId" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <select asp-for="CustomerAccountId" class ="form-control" asp-items="ViewBag.CustomerAccountId"></select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="RatePerHour" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="RatePerHour" class="form-control" />
+                <span asp-validation-for="RatePerHour" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="EffectiveStartDate" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="EffectiveStartDate" class="form-control" />
+                <span asp-validation-for="EffectiveStartDate" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="EffectiveEndDate" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="EffectiveEndDate" class="form-control" />
+                <span asp-validation-for="EffectiveEndDate" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+</form>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

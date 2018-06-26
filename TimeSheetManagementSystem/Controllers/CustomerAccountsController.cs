@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using TimeSheetManagementSystem.Data;
 using TimeSheetManagementSystem.Models;
+using TimeSheetManagementSystem.ViewModels.CustomerAccountsViewModel;
 using Microsoft.AspNetCore.Identity;
 
 namespace TimeSheetManagementSystem.Controllers
@@ -67,7 +68,7 @@ namespace TimeSheetManagementSystem.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost("Create")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CustomerAccountId,AccountName,Comments,IsVisible,CreatedAt,CreatedById,UpdatedAt,UpdatedById")] CustomerAccount customerAccount)
+        public async Task<IActionResult> Create([Bind("CustomerAccountId,AccountName,Comments,IsVisible,CreatedAt,CreatedById,UpdatedAt,UpdatedById")] CreateCustomerAccounts customerAccount)
         {
             var loginIdName = _userManager.GetUserName(User);
             UserInfo currentUser = await _context.UserInfo
@@ -77,7 +78,7 @@ namespace TimeSheetManagementSystem.Controllers
             CustomerAccount newCustomer = new CustomerAccount();
             newCustomer.AccountName = customerAccount.AccountName;
             newCustomer.Comments = customerAccount.Comments;
-            newCustomer.IsVisible = customerAccount.IsVisible;
+            newCustomer.IsVisible = customerAccount.isVisible;
             newCustomer.CreatedAt = DateTime.Now;
             newCustomer.CreatedById = currentUser.UserInfoId;
             newCustomer.UpdatedAt = DateTime.Now;
@@ -87,24 +88,42 @@ namespace TimeSheetManagementSystem.Controllers
             {
                 _context.Add(newCustomer);
                 await _context.SaveChangesAsync();
+
+                // Account rates, the code is initialized after the database is updated so that the database can generate the id for the customer accounts.
+                // TODO: Implement Account Rates, probably with ViewModel, though I'm not sure if I should create ViewModel for everything. 
+                var customerId = await _context.CustomerAccounts.Where(c => c.AccountName == customerAccount.AccountName)
+                    .Select(x => x.CustomerAccountId)
+                    .SingleAsync();
+
+                AccountRate accRate = new AccountRate();
+
+                accRate.CustomerAccountId = customerId;
+                accRate.EffectiveStartDate = customerAccount.EffectiveStartDate.Date;
+                accRate.RatePerHour = customerAccount.RatePerHour;
+
+                // C# 6.0 Monadic null checking
+                // Credits - https://damieng.com/blog/2013/12/09/probable-c-6-0-features-illustrated
+                accRate.EffectiveEndDate = customerAccount?.EffectiveEndDate.Value.Date ?? null;
+
+                try
+                {
+                    _context.Add(accRate);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateException)
+                {
+                    ModelState.AddModelError("", "Unable to save changes. " +
+                    "Try again, and if the problem persists, " +
+                    "see your system administrator.");
+                }
+
                 return RedirectToAction("Index");
             }
-            catch (DbUpdateException ex)
+            catch (DbUpdateException )
             {
                 return View(nameof(Create));
             }
 
-            // Account rates, the code is initialized after the database is updated so that the database can generate the id for the customer accounts.
-            // TODO: Implement Account Rates, probably with ViewModel, though I'm not sure if I should create ViewModel for everything. 
-            //var customerId = await _context.CustomerAccounts.Where(c => c.AccountName == customerAccount.AccountName)
-            //    .Select(x => x.CustomerAccountId)
-            //    .SingleAsync();
-
-            //AccountRate accRate = new AccountRate();
-
-            //accRate.CustomerAccountId = customerId;
-            //accRate.EffectiveStartDate = newCustomer.CreatedAt;
-            //accRate.RatePerHour = customerAccount.RatePerHour;
 
             // useless code
             //if (ModelState.IsValid)

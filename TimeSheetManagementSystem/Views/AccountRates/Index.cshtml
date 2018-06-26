@@ -1,0 +1,53 @@
+@model IEnumerable<TimeSheetManagementSystem.Models.AccountRate>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.RatePerHour)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.EffectiveStartDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.EffectiveEndDate)
+                </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CustomerAccount)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.RatePerHour)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EffectiveStartDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EffectiveEndDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CustomerAccount.AccountName)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.AccountRateId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.AccountRateId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.AccountRateId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

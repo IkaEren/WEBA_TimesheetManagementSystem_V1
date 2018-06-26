@@ -1,4 +1,4 @@
-@model TimeSheetManagementSystem.Models.CustomerAccount
+@model TimeSheetManagementSystem.ViewModels.CustomerAccountsViewModel.CreateCustomerAccounts
 
 @{
     ViewData["Title"] = "Create";
@@ -28,37 +28,28 @@
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <div class="checkbox">
-                    <input asp-for="IsVisible" />
-                    <label asp-for="IsVisible"></label>
+                    <input asp-for="isVisible" />
+                    <label asp-for="isVisible"></label>
                 </div>
             </div>
         </div>
-        @*<div class="form-group">
-            <label asp-for="CreatedAt" class="col-md-2 control-label">Customer Start Date</label>
-            <div class="col-md-10">
-                <input asp-for="CreatedAt" class="form-control" />
-                <span asp-validation-for="CreatedAt" class="text-danger"></span>
+
+        <div class="form-group">
+            <label asp-for="EffectiveStartDate" class="col-md-2 control-label">Effective Start Date</label>
+            <div class="col-md-offset-2 col-md-10 date">
+                <input asp-for="EffectiveStartDate" class="form-control" />
+                <span asp-validation-for="EffectiveStartDate" class="text-danger"></span>
+            </div> 
+        </div>
+
+        <div class="form-group">
+            <label asp-for="EffectiveEndDate" class="col-md-2 control-label">Effective End Date</label>
+            <div class="col-md-offset-2 col-md-10 date">
+                <input asp-for="EffectiveEndDate" class="form-control" />
+                <span asp-validation-for="EffectiveEndDate" class="text-danger"></span>
             </div>
-        </div>*@
-        @*<div class="form-group">
-            <label asp-for="CreatedById" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <select asp-for="CreatedById" class ="form-control" asp-items="ViewBag.CreatedById"></select>
-            </div>
-        </div>*@
-        @*<div class="form-group">
-            <label asp-for="UpdatedAt" class="col-md-2 control-label">Customer End Date</label>
-            <div class="col-md-10">
-                <input asp-for="UpdatedAt" class="form-control" />
-                <span asp-validation-for="UpdatedAt" class="text-danger"></span>
-            </div>
-        </div>*@
-        @*<div class="form-group">
-            <label asp-for="UpdatedById" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <select asp-for="UpdatedById" class ="form-control" asp-items="ViewBag.UpdatedById"></select>
-            </div>
-        </div>*@
+        </div>
+
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <input type="submit" value="Create" class="btn btn-default" />
@@ -80,4 +71,16 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+            $(function () {
+                $(document).ready(function () {
+                    $(function () {
+                        $('#EffectiveStartDate').datetimepicker();
+                    });
+                    $(function () {
+                        $('#EffectiveEndDate').datetimepicker();
+                    });
+                });
+            });
+    </script>
 }
