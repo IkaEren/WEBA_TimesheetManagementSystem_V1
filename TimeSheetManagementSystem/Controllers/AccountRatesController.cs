@@ -12,6 +12,7 @@ namespace TimeSheetManagementSystem.Controllers
 {
     public class AccountRatesController : Controller
     {
+        // TODO: Touchup on accountrates controller
         private readonly ApplicationDbContext _context;
 
         public AccountRatesController(ApplicationDbContext context)

@@ -19,6 +19,7 @@ namespace TimeSheetManagementSystem.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
+        private int? testId { get; set; }
 
         public SessionSynopsisController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
@@ -56,22 +57,10 @@ namespace TimeSheetManagementSystem.Controllers
         }
 
         // GET: SessionSynopsis/Create
-        // ??? Don't know why is this here but I'll fix it. 
+        // To get the view of SessionSynopsis/Create.cshtml
         [HttpGet("Create")]
-        public async Task<IActionResult> Create()
+        public IActionResult Create()
         {
-            var user = await GetCurrentUserAsync();
-            var loginIdName = _userManager.GetUserName(User);
-            UserInfo currentUser = await _context.UserInfo
-                .Where(userId => userId.LoginUserName == loginIdName)
-                .SingleAsync();
-
-            ViewBag.Email = currentUser.Email;
-
-            //ViewData["CreatedById"] = new SelectList(currentUser, "UserInfoId", "Email");
-            //ViewData["UpdatedById"] = new SelectList(currentUser, "UserInfoId", "Email");
-            //ViewData["CreatedById"] = new SelectList(_context.UserInfo, "UserInfoId", "Email");
-            //ViewData["UpdatedById"] = new SelectList(_context.UserInfo, "UserInfoId", "Email");
             return View();
         }
 
@@ -80,7 +69,7 @@ namespace TimeSheetManagementSystem.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost("Create", Name = "Create_Session")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("SessionSynopsisId,SessionSynopsisName,CreatedById,UpdatedById,IsVisible")] SessionSynopsis session)
+        public async Task<IActionResult> Create([Bind("SessionSynopsisName,IsVisible")] SessionSynopsis session)
         {
             //var user = await GetCurrentUserAsync();
             var loginIdName = _userManager.GetUserName(User);
@@ -98,55 +87,46 @@ namespace TimeSheetManagementSystem.Controllers
             newSession.CreatedById = session.CreatedById;
             newSession.IsVisible = session.IsVisible;
 
-            // TODO: Add if (modelstate.isvalid) here
-            try
+            if (ModelState.IsValid)
             {
-                _context.Add(newSession);
-                await _context.SaveChangesAsync();
-                //TempData["Success"] = "Session synopsis successfully created";
-                return RedirectToAction("Index");
+                try
+                {
+                    _context.Add(newSession);
+                    await _context.SaveChangesAsync();
+                    TempData["Success"] = "Your session synopsis has been successfully created!";
+                    return RedirectToAction("Index");
+                }
+                catch (DbUpdateException)
+                {
+                    ModelState.AddModelError("Update Error", "The session synopsis has already been created.");
+                    return View();
+                }
             }
-            catch (DbUpdateException ex)
+            else
             {
-                return View(nameof(Create));
+                ModelState.AddModelError("Unknown Error", "Some of the field has invalid data.");
+                return View();
             }
-            //if (ModelState.IsValid)
-            //{
-            //    sessionSynopsis.CreatedById = currentUser.UserInfoId;
-            //    sessionSynopsis.UpdatedById = currentUser.UserInfoId;
-            //    _context.Add(sessionSynopsis);
-            //    await _context.SaveChangesAsync();
-            //    return RedirectToAction("Index");
         }
-        //ViewData["CreatedById"] = new SelectList(_context.UserInfo, "UserInfoId", "Email", sessionSynopsis.CreatedById);
-        //ViewData["UpdatedById"] = new SelectList(_context.UserInfo, "UserInfoId", "Email", sessionSynopsis.UpdatedById);
-        //ViewData["CreatedById"] = user;
-        //ViewData["UpdatedById"] = user;
-        //return View(sessionSynopsis);
 
         // GET: SessionSynopsis/Edit/5
         [HttpGet("Edit/{id}")]
         public async Task<IActionResult> Edit(int? id)
         {
-            var user = await GetCurrentUserAsync();
             if (id == null)
             {
                 return NotFound();
             }
 
+            testId = (id);
+
             var sessionSynopsis = await _context.SessionSynopses.SingleOrDefaultAsync(m => m.SessionSynopsisId == id);
-            if (sessionSynopsis == null)
-            {
-                return NotFound();
-            }
-            //ViewData["CreatedById"] = new SelectList(_context.UserInfo, "UserInfoId", "Email", sessionSynopsis.CreatedById);
-            //ViewData["UpdatedById"] = new SelectList(_context.UserInfo, "UserInfoId", "Email", sessionSynopsis.UpdatedById);
+
             var loginIdName = _userManager.GetUserName(User);
             UserInfo currentUser = await _context.UserInfo
                 .Where(userId => userId.LoginUserName == loginIdName)
                 .SingleAsync();
 
-            ViewBag.Email = currentUser.UserInfoId;
             return View(sessionSynopsis);
         }
 
@@ -166,7 +146,7 @@ namespace TimeSheetManagementSystem.Controllers
                 var loginIdName = _userManager.GetUserName(User);
                 UserInfo currentUser = await _context.UserInfo
                     .Where(userId => userId.LoginUserName == loginIdName)
-                    .SingleAsync();
+                    .SingleAsync();                
 
                 // https://docs.microsoft.com/en-us/aspnet/core/data/ef-mvc/crud?view=aspnetcore-2.1#update-the-edit-page
                 // Copy pasta from here!
@@ -175,48 +155,25 @@ namespace TimeSheetManagementSystem.Controllers
                         "",
                         s => s.SessionSynopsisName, s => s.IsVisible))
                 {
-                    updateSession.UpdatedById = currentUser.UserInfoId;
-                    await _context.SaveChangesAsync();
-                }
-
+                    try
+                    {
+                        updateSession.UpdatedById = currentUser.UserInfoId;
+                        await _context.SaveChangesAsync();
+                        TempData["Success"] = "Your session synopsis has been updated successfully";
+                    }
+                    catch (DbUpdateException)
+                    {
+                        ModelState.AddModelError("Update Error", "The session synopsis has already been created.");
+                        return View();
+                    }
+                } // End of if
                 return RedirectToAction("Index");
-            }
-
+            } // End of if
             else
             {
-                return BadRequest();
+                ModelState.AddModelError("Unknown Error", "Some of the field has invalid data.");
+                return View();
             }
-
-
-            // TODO: Add some server side duplication check but for now I guess it's fine for basic functionality. 
-            //if (id != sessionSynopsis.SessionSynopsisId)
-            //{
-            //    return NotFound();
-            //}
-
-            //if (ModelState.IsValid)
-            //{
-            //    try
-            //    {
-            //        _context.Update(sessionSynopsis);
-            //        await _context.SaveChangesAsync();
-            //    }
-            //    catch (DbUpdateConcurrencyException)
-            //    {
-            //        if (!SessionSynopsisExists(sessionSynopsis.SessionSynopsisId))
-            //        {
-            //            return NotFound();
-            //        }
-            //        else
-            //        {
-            //            throw;
-            //        }
-            //    }
-            //    return RedirectToAction("Index");
-            //}
-            //ViewData["CreatedById"] = new SelectList(_context.UserInfo, "UserInfoId", "Email", sessionSynopsis.CreatedById);
-            //ViewData["UpdatedById"] = new SelectList(_context.UserInfo, "UserInfoId", "Email", sessionSynopsis.UpdatedById);
-            //return View(sessionSynopsis);
         }
 
         // GET: SessionSynopsis/Delete/5
@@ -248,6 +205,7 @@ namespace TimeSheetManagementSystem.Controllers
             var sessionSynopsis = await _context.SessionSynopses.SingleOrDefaultAsync(m => m.SessionSynopsisId == id);
             _context.SessionSynopses.Remove(sessionSynopsis);
             await _context.SaveChangesAsync();
+            TempData["Success"] = "The Session Synopsis has been deleted successfully";
             return RedirectToAction("Index");
         }
 
@@ -260,6 +218,20 @@ namespace TimeSheetManagementSystem.Controllers
         private Task<ApplicationUser> GetCurrentUserAsync()
         {
             return _userManager.GetUserAsync(HttpContext.User);
+        }
+
+        // With reference to https://www.codeproject.com/Articles/1204076/ASP-NET-Core-MVC-Remote-Validation
+        public async Task<IActionResult> Verify([Bind("SessionSynopsisName")]SessionSynopsis test)
+        {
+            SessionSynopsis sessionSynopsis = await _context.SessionSynopses.SingleOrDefaultAsync(
+                s => s.SessionSynopsisName == test.SessionSynopsisName && s.SessionSynopsisId == testId);
+
+            if (sessionSynopsis == null)
+            {
+                return Json(true);
+            }
+
+            return Json($"{test.SessionSynopsisName} is already in use!");
         }
     }
 }

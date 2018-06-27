@@ -2,7 +2,6 @@
 @using TimeSheetManagementSystem.Models
 @using System.Security.Claims 
 @model TimeSheetManagementSystem.Models.SessionSynopsis
-@inject UserManager<ApplicationUser> UserManager
 
 @{
     ViewData["Title"] = "Create";
@@ -12,35 +11,21 @@
 
 <form asp-action="Create">
     <div class="form-horizontal">
-        <h4>SessionSynopsis</h4>
+        <h4>New Session Synopsis</h4>
         <hr />
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <div class="form-group">
-            <label asp-for="SessionSynopsisName" class="col-md-2 control-label"></label>
+            <label asp-for="SessionSynopsisName" class="col-md-2 control-label">Synopsis Name</label>
             <div class="col-md-10">
                 <input asp-for="SessionSynopsisName" class="form-control" />
                 <span asp-validation-for="SessionSynopsisName" class="text-danger"></span>
             </div>
         </div>
         <div class="form-group">
-            <label asp-for="CreatedById" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input type="text" class ="form-control" value="@ViewBag.Email" readonly />
-            </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="UpdatedById" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input type="text" class ="form-control" value="@ViewBag.Email" readonly/>
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <div class="checkbox">
-                    <input asp-for="IsVisible" />
-                    <label asp-for="IsVisible"></label>
+            <label asp-for="IsVisible" class="col-md-2 control-label">Visiblity</label>
+                <div class="col-md-10">
+                    <input type="checkbox" asp-for="IsVisible" name="test"/>
                 </div>
-            </div>
         </div>
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
@@ -51,9 +36,12 @@
 </form>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a role="button" class="btn btn-primary" asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        $('[id="IsVisible"]').bootstrapSwitch();
+    </script>
 }

@@ -1,8 +1,9 @@
 # Changelog
 
-## 3.3.4
+## 4.0.0-alpha.1
 
-- Fix Object.assign not working for IE <= 11 [#616](https://github.com/Bttstrp/bootstrap-switch/issues/616)
+- Scaffolding for v4
+- SASS for CSS sources
 
 ## 3.3.3
 

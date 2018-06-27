@@ -101,6 +101,7 @@ namespace TimeSheetManagementSystem.Controllers
                 accRate.EffectiveStartDate = customerAccount.EffectiveStartDate.Date;
                 accRate.RatePerHour = customerAccount.RatePerHour;
 
+                // TODO: Fix the null checking if possible but it's okay
                 // C# 6.0 Monadic null checking
                 // Credits - https://damieng.com/blog/2013/12/09/probable-c-6-0-features-illustrated
                 accRate.EffectiveEndDate = customerAccount?.EffectiveEndDate.Value.Date ?? null;

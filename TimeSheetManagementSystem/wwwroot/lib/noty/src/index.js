@@ -4,8 +4,8 @@ import 'noty.scss'
 import Promise from 'es6-promise'
 import * as Utils from 'utils'
 import * as API from 'api'
-import {NotyButton} from 'button'
-import {Push} from 'push'
+import { NotyButton } from 'button'
+import { Push } from 'push'
 
 export default class Noty {
   /**
@@ -14,6 +14,11 @@ export default class Noty {
    */
   constructor (options = {}) {
     this.options = Utils.deepExtend({}, API.Defaults, options)
+
+    if (API.Store[this.options.id]) {
+      return API.Store[this.options.id]
+    }
+
     this.id = this.options.id || Utils.generateID('bar')
     this.closeTimer = -1
     this.barDom = null
@@ -32,6 +37,7 @@ export default class Noty {
       afterShow: [],
       onClose: [],
       afterClose: [],
+      onClick: [],
       onHover: [],
       onTemplate: []
     }
@@ -44,6 +50,7 @@ export default class Noty {
     this.on('afterShow', this.options.callbacks.afterShow)
     this.on('onClose', this.options.callbacks.onClose)
     this.on('afterClose', this.options.callbacks.afterClose)
+    this.on('onClick', this.options.callbacks.onClick)
     this.on('onHover', this.options.callbacks.onHover)
     this.on('onTemplate', this.options.callbacks.onTemplate)
 
@@ -67,33 +74,40 @@ export default class Noty {
    * @return {Noty}
    */
   show () {
-    if (this.options.killer === true && !API.PageHidden) {
+    if (this.showing || this.shown) {
+      return this // preventing multiple show
+    }
+
+    if (this.options.killer === true) {
       Noty.closeAll()
-    } else if (typeof this.options.killer === 'string' && !API.PageHidden) {
+    } else if (typeof this.options.killer === 'string') {
       Noty.closeAll(this.options.killer)
-    } else {
-      let queueCounts = API.getQueueCounts(this.options.queue)
+    }
 
-      if (queueCounts.current >= queueCounts.maxVisible || API.PageHidden) {
-        API.addToQueue(this)
+    let queueCounts = API.getQueueCounts(this.options.queue)
 
-        if (
-          API.PageHidden &&
-          this.hasSound &&
-          Utils.inArray('docHidden', this.options.sounds.conditions)
-        ) {
-          Utils.createAudioElements(this)
-        }
+    if (
+      queueCounts.current >= queueCounts.maxVisible ||
+      (API.PageHidden && this.options.visibilityControl)
+    ) {
+      API.addToQueue(this)
 
-        if (
-          API.PageHidden &&
-          Utils.inArray('docHidden', this.options.titleCount.conditions)
-        ) {
-          API.docTitle.increment()
-        }
-
-        return this
+      if (
+        API.PageHidden &&
+        this.hasSound &&
+        Utils.inArray('docHidden', this.options.sounds.conditions)
+      ) {
+        Utils.createAudioElements(this)
       }
+
+      if (
+        API.PageHidden &&
+        Utils.inArray('docHidden', this.options.titleCount.conditions)
+      ) {
+        API.docTitle.increment()
+      }
+
+      return this
     }
 
     API.Store[this.id] = this
@@ -139,7 +153,7 @@ export default class Noty {
         )
         Utils.addListener(btn, 'click', e => {
           Utils.stopPropagation(e)
-          this.options.buttons[key].cb()
+          this.options.buttons[key].cb(this)
         })
       })
     }
@@ -153,6 +167,7 @@ export default class Noty {
         'click',
         e => {
           Utils.stopPropagation(e)
+          API.fire(this, 'onClick')
           this.close()
         },
         false
@@ -169,6 +184,9 @@ export default class Noty {
     )
 
     if (this.options.timeout) Utils.addClass(this.barDom, 'noty_has_timeout')
+    if (this.options.progressBar) {
+      Utils.addClass(this.barDom, 'noty_has_progressbar')
+    }
 
     if (Utils.inArray('button', this.options.closeWith)) {
       Utils.addClass(this.barDom, 'noty_close_with_button')
@@ -341,7 +359,7 @@ export default class Noty {
 
     this.closing = true
 
-    if (this.options.animation.close === null) {
+    if (this.options.animation.close === null || this.options.animation.close === false) {
       this.promises.close = new Promise(resolve => {
         resolve()
       })
@@ -395,6 +413,31 @@ export default class Noty {
   }
 
   /**
+   * @param {string} queueName
+   * @return {Noty}
+   */
+  static clearQueue (queueName = 'global') {
+    if (API.Queues.hasOwnProperty(queueName)) {
+      API.Queues[queueName].queue = []
+    }
+    return this
+  }
+
+  /**
+   * @return {API.Queues}
+   */
+  static get Queues () {
+    return API.Queues
+  }
+
+  /**
+   * @return {API.PageHidden}
+   */
+  static get PageHidden () {
+    return API.PageHidden
+  }
+
+  /**
    * @param {Object} obj
    * @return {Noty}
    */
@@ -445,4 +488,6 @@ export default class Noty {
 }
 
 // Document visibility change controller
-Utils.visibilityChangeFlow()
+if (typeof window !== 'undefined') {
+  Utils.visibilityChangeFlow()
+}

@@ -17,17 +17,21 @@
   ],
   "dependencies": {
     "bootstrap": ">=2.3.2",
-    "jquery": "~1.9.0"
+    "jquery": ">=1.9.0"
+  },
+  "devDependencies": {
+    "jquery": "~2.1"
   },
   "homepage": "https://github.com/nostalgiaz/bootstrap-switch",
-  "version": "3.3.4",
-  "_release": "3.3.4",
+  "version": "4.0.0-alpha.1",
+  "_release": "4.0.0-alpha.1",
   "_resolution": {
     "type": "version",
-    "tag": "v3.3.4",
-    "commit": "02721b769a6ac83eabe733fd9f08a2ddc7320756"
+    "tag": "v4.0.0-alpha.1",
+    "commit": "30ef0baede039cfe0ae95c3b5d33eb50c7c29f30"
   },
   "_source": "https://github.com/nostalgiaz/bootstrap-switch.git",
-  "_target": "3.3.4",
-  "_originalSource": "bootstrap-switch"
+  "_target": "v4.0.0-alpha.1",
+  "_originalSource": "bootstrap-switch",
+  "_direct": true
 }

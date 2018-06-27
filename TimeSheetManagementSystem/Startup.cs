@@ -102,6 +102,7 @@ namespace TimeSheetManagementSystem
 
             app.UseStaticFiles();
             app.UseIdentity();
+            app.UseSession();
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

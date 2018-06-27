@@ -8,12 +8,11 @@
 
 <h3>Are you sure you want to delete this?</h3>
 <div>
-    <h4>SessionSynopsis</h4>
     <hr />
     <dl class="dl-horizontal">
         <input type="hidden" asp-for="SessionSynopsisId" />
         <dt>
-            @Html.DisplayNameFor(model => model.SessionSynopsisName)
+            <label>Synopsis Name</label>
         </dt>
         <dd>
             @Html.DisplayFor(model => model.SessionSynopsisName)
@@ -40,8 +39,8 @@
     
     <form asp-action="Delete">
         <div class="form-actions no-color">
-            <input type="submit" value="Delete" class="btn btn-default" /> |
-            <a asp-action="Index">Back to List</a>
+            <a role="button" class="btn btn-primary" asp-action="Index">Back to List</a> |
+            <input type="submit" value="Delete" class="btn btn-danger" />
         </div>
     </form>
 </div>

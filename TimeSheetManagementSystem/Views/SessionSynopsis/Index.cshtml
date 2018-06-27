@@ -1,19 +1,19 @@
 @model IEnumerable<TimeSheetManagementSystem.Models.SessionSynopsis>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Manage Session Synposis";
 }
 
-<h2>Index</h2>
+<h2>Manage Session Synopsis</h2>
 
-<p>
-    <a asp-action="Create">Create New</a>
+<p class="pull-right">
+    <a class="btn btn-success" role="button" asp-action="Create">Create a new session synopsis</a>
 </p>
 <table class="table">
     <thead>
         <tr>
                 <th>
-                    @Html.DisplayNameFor(model => model.SessionSynopsisName)
+                    <label>Synopsis Name</label>
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.IsVisible)
@@ -33,21 +33,39 @@
             <td>
                 @Html.DisplayFor(modelItem => item.SessionSynopsisName)
             </td>
-            <td>
+            <td name="switch">
                 @Html.DisplayFor(modelItem => item.IsVisible)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.CreatedBy.Email)
+                @Html.DisplayFor(modelItem => item.CreatedBy.FullName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.UpdatedBy.Email)
+                @Html.DisplayFor(modelItem => item.UpdatedBy.FullName)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.SessionSynopsisId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.SessionSynopsisId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.SessionSynopsisId">Delete</a>
+                
+                <a class="btn btn-info pull-right" role="button" asp-action="Details" asp-route-id="@item.SessionSynopsisId">Details</a>
+                <a class="btn btn-warning pull-right" role="button" asp-action="Edit" asp-route-id="@item.SessionSynopsisId">Edit</a>
+                <a class="btn btn-danger pull-right" role="button" asp-action="Delete" asp-route-id="@item.SessionSynopsisId">Delete</a>
             </td>
         </tr>
 }
     </tbody>
 </table>
+
+@section scripts{ 
+    <script>
+        $(document).ready(function () {
+            // Can't use Null because the tempdata will be an empty string when it's not initialized.'
+            if ('@(TempData["Success"])' !== "") {
+                var message = '@TempData["Success"]'
+                new Noty({
+                    text: message,
+                    theme: 'metroui',
+                    type: 'success',
+                    timeout: 5000
+                }).show();
+            }
+        });
+    </script>
+}
