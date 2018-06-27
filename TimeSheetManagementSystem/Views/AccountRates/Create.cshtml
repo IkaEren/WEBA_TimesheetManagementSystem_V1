@@ -12,12 +12,6 @@
         <hr />
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <div class="form-group">
-            <label asp-for="CustomerAccountId" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <select asp-for="CustomerAccountId" class ="form-control" asp-items="ViewBag.CustomerAccountId"></select>
-            </div>
-        </div>
-        <div class="form-group">
             <label asp-for="RatePerHour" class="col-md-2 control-label"></label>
             <div class="col-md-10">
                 <input asp-for="RatePerHour" class="form-control" />
@@ -47,9 +41,32 @@
 </form>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a class="btn btn-default" role="button" asp-route-id="@ViewBag.CustomerAccountId" asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+<script>
+            $(function () {
+                $(document).ready(function () {
+                    $(function () {
+                        $('#EffectiveStartDate').datetimepicker({
+                            format: 'DD/MM/YYYY'
+                        });
+                    });
+                    $(function () {
+                        $('#EffectiveEndDate').datetimepicker({
+                            format: 'DD/MM/YYYY'
+                        });
+                    });
+
+                    //$('#EffectiveStartDate').on('dp.change', function (x) {
+                    //    $('#EffectiveEndDate').data("DateTimePicker").minDate(x.date);
+                    //});
+                    //$('#EffectiveEndDate').on('dp.change', function (x) {
+                    //    $('#EffectiveStartDate').data("DateTimePicker").maxDate(x.date);
+                    //});
+                });
+            });
+</script>
 }

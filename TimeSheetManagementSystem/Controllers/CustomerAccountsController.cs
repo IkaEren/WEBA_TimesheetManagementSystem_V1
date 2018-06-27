@@ -68,7 +68,7 @@ namespace TimeSheetManagementSystem.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost("Create")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CustomerAccountId,AccountName,Comments,IsVisible,CreatedAt,CreatedById,UpdatedAt,UpdatedById")] CreateCustomerAccounts customerAccount)
+        public async Task<IActionResult> Create([Bind("AccountName,Comments,isVisible,EffectiveStartDate,EffectiveEndDate,RatePerHour")] CreateCustomerAccounts customerAccount)
         {
             var loginIdName = _userManager.GetUserName(User);
             UserInfo currentUser = await _context.UserInfo
@@ -104,11 +104,22 @@ namespace TimeSheetManagementSystem.Controllers
                 // TODO: Fix the null checking if possible but it's okay
                 // C# 6.0 Monadic null checking
                 // Credits - https://damieng.com/blog/2013/12/09/probable-c-6-0-features-illustrated
-                accRate.EffectiveEndDate = customerAccount?.EffectiveEndDate.Value.Date ?? null;
+                // Fix on CA2 rip
+                //accRate.EffectiveEndDate = customerAccount?.EffectiveEndDate.Value.Date;
+
+                if (customerAccount.EffectiveEndDate != null)
+                {
+                    accRate.EffectiveEndDate = customerAccount.EffectiveEndDate.Value.Date;
+                }
+                else
+                {
+                    accRate.EffectiveEndDate = null;
+                }
 
                 try
                 {
                     _context.Add(accRate);
+                    TempData["Success"] = "The Customer Account has been successfully created.";
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateException)
@@ -124,18 +135,6 @@ namespace TimeSheetManagementSystem.Controllers
             {
                 return View(nameof(Create));
             }
-
-
-            // useless code
-            //if (ModelState.IsValid)
-            //{
-            //    _context.Add(customerAccount);
-            //    await _context.SaveChangesAsync();
-            //    return RedirectToAction("Index");
-            //}
-            //ViewData["CreatedById"] = new SelectList(_context.UserInfo, "UserInfoId", "Email", customerAccount.CreatedById);
-            //ViewData["UpdatedById"] = new SelectList(_context.UserInfo, "UserInfoId", "Email", customerAccount.UpdatedById);
-            //return View(customerAccount);
         }
         
         // GET: CustomerAccounts/Edit/5
@@ -148,12 +147,11 @@ namespace TimeSheetManagementSystem.Controllers
             }
 
             var customerAccount = await _context.CustomerAccounts.SingleOrDefaultAsync(m => m.CustomerAccountId == id);
+
             if (customerAccount == null)
             {
                 return NotFound();
             }
-            //ViewData["CreatedById"] = new SelectList(_context.UserInfo, "UserInfoId", "Email", customerAccount.CreatedById);
-            //ViewData["UpdatedById"] = new SelectList(_context.UserInfo, "UserInfoId", "Email", customerAccount.UpdatedById);
             return View(customerAccount);
         }
 
@@ -183,6 +181,7 @@ namespace TimeSheetManagementSystem.Controllers
                     {
                         updateCustomer.UpdatedById = currentUser.UserInfoId;
                         updateCustomer.UpdatedAt = timeNow;
+                        TempData["Success"] = "The Customer Account has been updated successfully.";    
                         await _context.SaveChangesAsync();
                     }
                     catch (DbUpdateException)
@@ -195,34 +194,6 @@ namespace TimeSheetManagementSystem.Controllers
             }
 
             return RedirectToAction("Index");
-            //if (id != customerAccount.CustomerAccountId)
-            //{
-            //    return NotFound();
-            //}
-
-            //if (ModelState.IsValid)
-            //{
-            //    try
-            //    {
-            //        _context.Update(customerAccount);
-            //        await _context.SaveChangesAsync();
-            //    }
-            //    catch (DbUpdateConcurrencyException)
-            //    {
-            //        if (!CustomerAccountExists(customerAccount.CustomerAccountId))
-            //        {
-            //            return NotFound();
-            //        }
-            //        else
-            //        {
-            //            throw;
-            //        }
-            //    }
-            //    return RedirectToAction("Index");
-            //}
-            //ViewData["CreatedById"] = new SelectList(_context.UserInfo, "UserInfoId", "Email", customerAccount.CreatedById);
-            //ViewData["UpdatedById"] = new SelectList(_context.UserInfo, "UserInfoId", "Email", customerAccount.UpdatedById);
-            //return View(customerAccount);
         }
 
         // GET: CustomerAccounts/Delete/5
@@ -254,12 +225,25 @@ namespace TimeSheetManagementSystem.Controllers
             var customerAccount = await _context.CustomerAccounts.SingleOrDefaultAsync(m => m.CustomerAccountId == id);
             _context.CustomerAccounts.Remove(customerAccount);
             await _context.SaveChangesAsync();
+            TempData["Success"] = "The Customer Account has been updated successfully.";
             return RedirectToAction("Index");
         }
 
         private bool CustomerAccountExists(int id)
         {
             return _context.CustomerAccounts.Any(e => e.CustomerAccountId == id);
+        }
+        public async Task<IActionResult> Verify([Bind("AccountName")]CreateCustomerAccounts test)
+        {
+            CustomerAccount customerAccount = await _context.CustomerAccounts.SingleOrDefaultAsync(
+                c => c.AccountName == test.AccountName);
+
+            if (customerAccount == null)
+            {
+                return Json(true);
+            }
+
+            return Json($"{test.AccountName} is already in use!");
         }
     }
 }

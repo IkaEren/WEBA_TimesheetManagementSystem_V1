@@ -40,8 +40,8 @@
     
     <form asp-action="Delete">
         <div class="form-actions no-color">
-            <input type="submit" value="Delete" class="btn btn-default" /> |
-            <a asp-action="Index">Back to List</a>
+            <input class="btn btn-danger" type="submit" value="Delete" class="btn btn-default" /> |
+            <a class="btn btn-default" role="button" asp-route-id="@ViewBag.CustomerAccountId" asp-action="Index">Back to List</a>
         </div>
     </form>
 </div>

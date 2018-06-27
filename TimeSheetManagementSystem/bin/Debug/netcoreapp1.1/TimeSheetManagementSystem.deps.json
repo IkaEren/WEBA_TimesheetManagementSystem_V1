@@ -1,7 +1,7 @@
 {
   "runtimeTarget": {
     "name": ".NETCoreApp,Version=v1.1",
-    "signature": "b256fa1ca5d9f2ce9b97b2dd77f4b0d049b2f8db"
+    "signature": "1a3aaa07c7223668e3c8cb75207faf2caf7c82af"
   },
   "compilationOptions": {
     "defines": [
@@ -41,7 +41,8 @@
           "Microsoft.Extensions.Logging.Debug": "1.1.1",
           "Microsoft.NETCore.App": "1.1.2",
           "Microsoft.VisualStudio.Web.BrowserLink": "1.1.0",
-          "Microsoft.VisualStudio.Web.CodeGeneration.Design": "1.1.0"
+          "Microsoft.VisualStudio.Web.CodeGeneration.Design": "1.1.0",
+          "ReflectionIT.Mvc.Paging": "1.7.0"
         },
         "runtime": {
           "TimeSheetManagementSystem.dll": {}
@@ -1195,6 +1196,18 @@
           "lib/netstandard1.0/Microsoft.Extensions.FileProviders.Composite.dll": {}
         }
       },
+      "Microsoft.Extensions.FileProviders.Embedded/1.1.0": {
+        "dependencies": {
+          "Microsoft.Extensions.FileProviders.Abstractions": "1.1.0",
+          "NETStandard.Library": "1.6.1"
+        },
+        "runtime": {
+          "lib/netstandard1.5/Microsoft.Extensions.FileProviders.Embedded.dll": {}
+        },
+        "compile": {
+          "lib/netstandard1.5/Microsoft.Extensions.FileProviders.Embedded.dll": {}
+        }
+      },
       "Microsoft.Extensions.FileProviders.Physical/1.1.0": {
         "dependencies": {
           "Microsoft.Extensions.FileProviders.Abstractions": "1.1.0",
@@ -1573,6 +1586,23 @@
         },
         "compile": {
           "lib/netstandard1.3/NuGet.Frameworks.dll": {}
+        }
+      },
+      "ReflectionIT.Mvc.Paging/1.7.0": {
+        "dependencies": {
+          "Microsoft.AspNetCore.Mvc": "1.1.2",
+          "Microsoft.AspNetCore.Mvc.ViewFeatures": "1.1.2",
+          "Microsoft.AspNetCore.Routing": "1.1.1",
+          "Microsoft.EntityFrameworkCore.SqlServer": "1.1.1",
+          "Microsoft.Extensions.FileProviders.Embedded": "1.1.0",
+          "Microsoft.Extensions.Options": "1.1.1",
+          "NETStandard.Library": "1.6.1"
+        },
+        "runtime": {
+          "lib/netstandard1.6/ReflectionIT.Mvc.Paging.dll": {}
+        },
+        "compile": {
+          "lib/netstandard1.6/ReflectionIT.Mvc.Paging.dll": {}
         }
       },
       "Remotion.Linq/2.1.1": {
@@ -4114,6 +4144,13 @@
       "path": "microsoft.extensions.fileproviders.composite/1.1.0",
       "hashPath": "microsoft.extensions.fileproviders.composite.1.1.0.nupkg.sha512"
     },
+    "Microsoft.Extensions.FileProviders.Embedded/1.1.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-5RcPDO/eRvcgRidXFrE8Oz6ECWClbWtKD27YOAFSutYLiFCRxskSJDD7WRfydtIfWeUpqeUwdaFiWnXS1ZZINg==",
+      "path": "microsoft.extensions.fileproviders.embedded/1.1.0",
+      "hashPath": "microsoft.extensions.fileproviders.embedded.1.1.0.nupkg.sha512"
+    },
     "Microsoft.Extensions.FileProviders.Physical/1.1.0": {
       "type": "package",
       "serviceable": true,
@@ -4295,6 +4332,13 @@
       "sha512": "sha512-mj7pCguESABXPe27wleBICqbo1h0nm1bdfQN9GSUnKOdWI2QNhE3AB0SvAWrD0PYanzG65thsbCeB/uLj+XSwg==",
       "path": "nuget.frameworks/3.5.0",
       "hashPath": "nuget.frameworks.3.5.0.nupkg.sha512"
+    },
+    "ReflectionIT.Mvc.Paging/1.7.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-c4iTCx9hKHX6O8hgfTipoAHyBQPeFAZIIwZVwuMF/FCvU9JgdFPbqAy41isJ2137pUUIrLSy95ThN4S8QXrJUw==",
+      "path": "reflectionit.mvc.paging/1.7.0",
+      "hashPath": "reflectionit.mvc.paging.1.7.0.nupkg.sha512"
     },
     "Remotion.Linq/2.1.1": {
       "type": "package",
