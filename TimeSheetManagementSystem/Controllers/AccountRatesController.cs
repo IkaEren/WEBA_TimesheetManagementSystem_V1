@@ -111,13 +111,16 @@ namespace TimeSheetManagementSystem.Controllers
         }
 
         // GET: AccountRates/Edit/5
-        [HttpGet("Edit/{id}")]
-        public async Task<IActionResult> Edit(int? id)
+        [HttpGet("Edit/{customerId}/{id}")]
+        public async Task<IActionResult> Edit(int? id, int customerId )
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            //AccountRate accRate = new AccountRate();
+
+            //accRate.RatePerHour = await _context.AccountRates.Where(x => x.AccountRateId == )
+            ////if (id == null)
+            ////{
+            ////    return NotFound();
+            ////}
 
             var accountRate = await _context.AccountRates.SingleOrDefaultAsync(m => m.AccountRateId == id);
             if (accountRate == null)

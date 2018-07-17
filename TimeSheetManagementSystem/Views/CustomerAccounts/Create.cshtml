@@ -36,7 +36,7 @@
 
         <div class="form-group">
             <label asp-for="EffectiveStartDate" class="col-md-2 control-label">Effective Start Date</label>
-            <div class="col-md-offset-2 col-md-10 date">
+            <div class="col-md-10 date">
                 <input asp-for="EffectiveStartDate" placeholder="DD/MM/YYYY" class="form-control" />
                 <span asp-validation-for="EffectiveStartDate" class="text-danger"></span>
             </div> 
@@ -44,7 +44,7 @@
 
         <div class="form-group">
             <label asp-for="EffectiveEndDate" class="col-md-2 control-label">Effective End Date</label>
-            <div class="col-md-offset-2 col-md-10 date">
+            <div class="col-md-10 date">
                 <input asp-for="EffectiveEndDate" class="form-control" placeholder="DD/MM/YYYY"/>
                 <span asp-validation-for="EffectiveEndDate" class="text-danger"></span>
             </div>
@@ -80,16 +80,31 @@
                     });
                     $(function () {
                         $('#EffectiveEndDate').datetimepicker({
-                            format: 'DD/MM/YYYY'
+                            format: 'DD/MM/YYYY',
+                            useCurrent: false
                         });
                     });
 
-                    //$('#EffectiveStartDate').on('dp.change', function (x) {
-                    //    $('#EffectiveEndDate').data("DateTimePicker").minDate(x.date);
-                    //});
-                    //$('#EffectiveEndDate').on('dp.change', function (x) {
-                    //    $('#EffectiveStartDate').data("DateTimePicker").maxDate(x.date);
-                    //});
+                    // To prevent the end date from becoming earlier than the start date. 
+                    $('#EffectiveStartDate').on('dp.change', function (x) {
+                        $('#EffectiveEndDate').data("DateTimePicker").minDate(x.date);
+                    });
+                    $('#EffectiveEndDate').on('dp.change', function (x) {
+                        $('#EffectiveStartDate').data("DateTimePicker").maxDate(x.date);
+                    });
+
+                    document.getElementById('EffectiveStartDate').addEventListener('keydown', function (e) {
+                        if (e.keyCode === 46 || e.keyCode === 8) {
+                            return;
+                        }
+                        e.preventDefault();
+                    }, false);
+                    document.getElementById('EffectiveEndDate').addEventListener('keydown', function (e) {
+                        if (e.keyCode === 46 || e.keyCode === 8) {
+                            return;
+                        }
+                        e.preventDefault();
+                    }, false);
                 });
             });
     </script>

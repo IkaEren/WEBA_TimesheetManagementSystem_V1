@@ -224,7 +224,7 @@ namespace TimeSheetManagementSystem.Controllers
         public async Task<IActionResult> Verify([Bind("SessionSynopsisName")]SessionSynopsis test)
         {
             SessionSynopsis sessionSynopsis = await _context.SessionSynopses.SingleOrDefaultAsync(
-                s => s.SessionSynopsisName == test.SessionSynopsisName && s.SessionSynopsisId == testId);
+                s => s.SessionSynopsisName == test.SessionSynopsisName || s.SessionSynopsisId == testId);
 
             if (sessionSynopsis == null)
             {
