@@ -11,14 +11,14 @@
         <h4>AccountRate</h4>
         <hr />
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    <input type="hidden" asp-for="AccountRateId" />
+    @*<input type="hidden" asp-for="AccountRateId" />
         <div class="form-group">
             <label asp-for="CustomerAccountId" class="control-label col-md-2"></label>
             <div class="col-md-10">
                 <select asp-for="CustomerAccountId" class="form-control" asp-items="ViewBag.CustomerAccountId"></select>
                 <span asp-validation-for="CustomerAccountId" class="text-danger"></span>
             </div>
-        </div>
+        </div>*@
         <div class="form-group">
             <label asp-for="RatePerHour" class="col-md-2 control-label"></label>
             <div class="col-md-10">

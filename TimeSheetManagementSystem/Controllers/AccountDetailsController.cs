@@ -10,6 +10,7 @@ namespace TimeSheetManagementSystem.Controllers
 {
     public class AccountDetailsController : Controller
     {
+
         // GET: /<controller>/
         public IActionResult Index()
         {

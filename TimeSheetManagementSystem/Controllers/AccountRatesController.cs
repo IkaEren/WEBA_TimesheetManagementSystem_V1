@@ -12,7 +12,7 @@ using ReflectionIT.Mvc.Paging;
 
 namespace TimeSheetManagementSystem.Controllers
 {
-    [Produces("application/json")]
+    //[Produces("application/json")]
     [Route("api/[controller]")]
     public class AccountRatesController : Controller
     {
@@ -47,7 +47,7 @@ namespace TimeSheetManagementSystem.Controllers
             ViewBag.CustomerAccountId = id;
             return View(test);
         }
-
+        
         // GET: AccountRates/Details/5
         [HttpGet("Details/{id}")]
         public async Task<IActionResult> Details(int? id)
@@ -111,7 +111,7 @@ namespace TimeSheetManagementSystem.Controllers
         }
 
         // GET: AccountRates/Edit/5
-        [HttpGet("Edit/{customerId}/{id}")]
+        [HttpGet("{customerid}/Edit/{id}")]
         public async Task<IActionResult> Edit(int? id, int customerId )
         {
             //AccountRate accRate = new AccountRate();
@@ -135,43 +135,44 @@ namespace TimeSheetManagementSystem.Controllers
         // POST: AccountRates/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost("Edit/{id}")]
+        [HttpPost("{customerid}/Edit/{id}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("AccountRateId,CustomerAccountId,RatePerHour,EffectiveStartDate,EffectiveEndDate")] AccountRate accountRate)
+        public async Task<IActionResult> Edit(int id, int customerid, [Bind("RatePerHour,EffectiveStartDate,EffectiveEndDate")] AccountRate accountRate)
         {
-            if (id != accountRate.AccountRateId)
-            {
-                return NotFound();
-            }
+            //if (id != accountRate.AccountRateId)
+            //{
+            //    return NotFound();
+            //}
 
             if (ModelState.IsValid)
             {
-                try
-                {
-                    _context.Update(accountRate);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!AccountRateExists(accountRate.AccountRateId))
+                    AccountRate updateRate = await _context.AccountRates.SingleAsync(s => s.AccountRateId == id);
+                    CustomerAccount updatecustomer = await _context.CustomerAccounts.SingleAsync(s => updateRate.CustomerAccountId == s.CustomerAccountId);
+                    if (await TryUpdateModelAsync<AccountRate>(
+                        updateRate,
+                        "",
+                        r => r.RatePerHour, r => r.EffectiveStartDate, r => r.EffectiveEndDate))
                     {
-                        return NotFound();
+                        try
+                        {
+                            await _context.SaveChangesAsync();
+                            return RedirectToAction(nameof(Index), new { id = customerid });
+                        }
+                        catch (DbUpdateException)
+                        {
+                            ModelState.AddModelError("", "Unable to save changes. " +
+                                "Try again later.");
+                        }
                     }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                TempData["Success"] = "Successfully deleted customer account.";
-                return RedirectToAction(nameof(Index), new { id = id });
+                TempData["Success"] = "Successfully edited accounts rate.";
+                return RedirectToAction(nameof(Index), new { id = customerid });
             }
-            ViewData["CustomerAccountId"] = new SelectList(_context.CustomerAccounts, "CustomerAccountId", "AccountName", accountRate.CustomerAccountId);
-            return View(accountRate);
+            return View();
         }
 
         // GET: AccountRates/Delete/5
-        [HttpGet("Delete/{id}")]
-        public async Task<IActionResult> Delete(int? id)
+        [HttpGet("{customerid}/Delete/{id}")]
+        public async Task<IActionResult> Delete(int? id, int customerid)
         {
             if (id == null)
             {
@@ -185,20 +186,20 @@ namespace TimeSheetManagementSystem.Controllers
             {
                 return NotFound();
             }
-            ViewBag.CustomerAccountId = id;
+            ViewBag.CustomerAccountId = customerid;
             return View(accountRate);
         }
 
         // POST: AccountRates/Delete/5
-        [HttpPost, ActionName("Delete/{id}")]
+        [HttpPost("{customerid}/Delete/{id}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> Delete(int id, int customerid)
         {
-            var accountRate = await _context.AccountRates.SingleOrDefaultAsync(m => m.AccountRateId == id);
+            var accountRate = await _context.AccountRates.SingleAsync(m => m.AccountRateId == id);
             _context.AccountRates.Remove(accountRate);
             await _context.SaveChangesAsync();
             TempData["Success"] = "Successfully deleted customer account.";
-            return RedirectToAction(nameof(Index), new { id = id });
+            return RedirectToAction(nameof(Index), new { id = customerid });
         }
 
         private bool AccountRateExists(int id)
