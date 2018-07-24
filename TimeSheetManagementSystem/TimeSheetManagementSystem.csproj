@@ -1331,5 +1331,8 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Views\AccountDetails\" />
+  </ItemGroup>
 
 </Project>
