@@ -23,7 +23,9 @@ namespace TimeSheetManagementSystem.Controllers
         {
             _context = context;
         }
+
         // GET: /<controller>/
+        [HttpGet("Index/{id}")]
         public async Task<IActionResult> Index(int id, int page = 1)
         {
             IOrderedQueryable<AccountDetail> test = _context.AccountDetails.Where(a => a.CustomerAccountId == id).OrderBy(x => x.AccountDetailId).Select(acc => new AccountDetail
@@ -38,20 +40,64 @@ namespace TimeSheetManagementSystem.Controllers
 
             var model = await PagingList<AccountDetail>.CreateAsync(test, 10, page);
 
+            ViewBag.customerId = id;
+
             return View(model);
         }
-        public IActionResult CreateOneAccountDetailForCustomerAccount()
+
+        [HttpGet("Create/{id}")]
+        public IActionResult Create()
         {
             return View();
         }
-        public IActionResult ManageAccountDetailsForOneCustomerAccount()
+
+        [HttpPost("Create/{id}")]
+        public async Task<IActionResult> Create(int id, [Bind("DayOfWeekNumber,EffectiveStartDate,EffectiveEndDate,StartTimeInMinutes,EndTimeInMinutes,IsVisible")] AccountDetail createAcc)
         {
+
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+            AccountDetail accountDetail = new AccountDetail();
+            accountDetail.CustomerAccountId = id;
+            accountDetail.StartTimeInMinutes = createAcc.StartTimeInMinutes;
+            accountDetail.EndTimeInMinutes = createAcc.EndTimeInMinutes;
+            accountDetail.EffectiveStartDate = createAcc.EffectiveStartDate;
+            accountDetail.EffectiveEndDate = createAcc.EffectiveEndDate;
+            accountDetail.IsVisible = createAcc.IsVisible;
+
+            if (await TryUpdateModelAsync<AccountDetail>(accountDetail,"AccountDetail", 
+                a => a.CustomerAccountId, a => a.DayOfWeekNumber,
+                a => a.EffectiveStartDate, a => a.EffectiveEndDate, 
+                a => a.StartTimeInMinutes, a => a.EndTimeInMinutes))
+            {
+                try
+                {
+                    _context.AccountDetails.Add(accountDetail);
+                    await _context.SaveChangesAsync();
+                    TempData["Success"] = "The Account Detail has been successfully created.";
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (DbUpdateException)
+                {
+                    ModelState.AddModelError("", "Unable to save changes. " +
+                        "Try again, and if the problem persists, " +
+                        "see your system administrator.");
+                }
+
+            }
+
             return View();
         }
-        public IActionResult UpdateOneAccountDetail()
-        {
-            return View();
-        }
+        //public IActionResult ManageAccountDetailsForOneCustomerAccount()
+        //{
+        //    return View();
+        //}
+        //public IActionResult UpdateOneAccountDetail()
+        //{
+        //    return View();
+        //}
 
     }
 }
