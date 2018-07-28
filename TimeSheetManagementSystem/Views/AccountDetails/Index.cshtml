@@ -54,6 +54,9 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.IsVisible)
                 </td>
+                <td>
+                    <a class="btn btn-warning btn-sm testBtn" role="button" data-toggle="modal" data-target=".testModal" data-id="@item.CustomerAccountId"> Delete </a>
+                </td>
                 @*<td>
                     <a class="btn btn-warning pull-right" role="button" asp-action="Edit" asp-route-id="@item.AccountRateId" asp-route-customerid="@ViewBag.CustomerAccountId">Edit</a>
                     <a class="btn btn-info pull-right" role="button" asp-action="Details" asp-route-id="@item.AccountRateId" asp-route-customerid="@ViewBag.CustomerAccountId">Details</a>
@@ -64,8 +67,45 @@
     </tbody>
 </table>
 
+<div class="modal fade testModal" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h3 class="modal-title">Delete Confirmation</h3>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete the account detail for: </p>
+            </div>
+            <div class="modal-footer">
+                <a id="deleteBtn" asp-action="Delete" class="btn btn-danger">
+                    Delete
+                </a>
+                <a class="btn btn-default" data-dismiss="modal" role="button">Close</a>
+            </div>
+        </div>
+    </div>
+</div>
+
 @section scripts{
     <script>
+        $(document).ready(function () {
+            $('.testBtn').click(function () {
+                var accId = $(this).data('id');//Get id of the synopsis that you want to delete
+                var accName = $(this).data('name');//Get name of the synopsis
+                console.log(accId);
+                console.log(accName);
+                // set id to the hidden input field in the form.
+                $('#deleteAccount').text(accName);
+
+                //Pass the id into
+                var $link = $('#deleteBtn');
+                var href = $link.attr('href').split('/');
+                href[3] = accId;
+                $link.attr('href', href.join('/'));
+            });
+        });
+
         $(document).ready(function () {
             // Can't use Null because the tempdata will be an empty string when it's not initialized.'
             if ('@(TempData["Success"])' !== "") {

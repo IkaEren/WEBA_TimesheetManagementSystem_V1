@@ -41,7 +41,6 @@ namespace TimeSheetManagementSystem.Controllers
             var model = await PagingList<AccountDetail>.CreateAsync(test, 10, page);
 
             ViewBag.customerId = id;
-
             return View(model);
         }
 
@@ -66,6 +65,7 @@ namespace TimeSheetManagementSystem.Controllers
             accountDetail.EffectiveStartDate = createAcc.EffectiveStartDate;
             accountDetail.EffectiveEndDate = createAcc.EffectiveEndDate;
             accountDetail.IsVisible = createAcc.IsVisible;
+            accountDetail.DayOfWeekNumber = createAcc.DayOfWeekNumber;
 
             if (await TryUpdateModelAsync<AccountDetail>(accountDetail,"AccountDetail", 
                 a => a.CustomerAccountId, a => a.DayOfWeekNumber,
@@ -85,10 +85,35 @@ namespace TimeSheetManagementSystem.Controllers
                         "Try again, and if the problem persists, " +
                         "see your system administrator.");
                 }
+            }
+            return View();
+        }
 
+        [HttpPost("Delete/{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var accDetail = await _context.AccountDetails
+                //.AsNoTracking()
+                .SingleOrDefaultAsync(a => a.CustomerAccountId == id);
+
+            if (accDetail == null)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+            
+            try
+            {
+                _context.AccountDetails.Remove(accDetail);
+                await _context.SaveChangesAsync();
+                TempData["Success"] = "The Account Detail has been successfully deleted.";
+                //return RedirectToAction(nameof(Index));
+            }
+            catch (DbUpdateException)
+            {
+                ModelState.AddModelError("Fail", "Failed to delete Account Detail");
             }
 
-            return View();
+            return RedirectToAction(nameof(Index), new { id = id });
         }
         //public IActionResult ManageAccountDetailsForOneCustomerAccount()
         //{
