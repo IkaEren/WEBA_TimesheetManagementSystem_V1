@@ -35,7 +35,8 @@ namespace TimeSheetManagementSystem.Controllers
                 EffectiveEndDate = acc.EffectiveEndDate,
                 StartTimeInMinutes = acc.StartTimeInMinutes,
                 EndTimeInMinutes = acc.EndTimeInMinutes,
-                DayOfWeekNumber = acc.DayOfWeekNumber
+                DayOfWeekNumber = acc.DayOfWeekNumber,
+                AccountDetailId = acc.AccountDetailId
             }).OrderBy(x => x.DayOfWeekNumber);
 
             var model = await PagingList<AccountDetail>.CreateAsync(test, 10, page);
@@ -89,17 +90,24 @@ namespace TimeSheetManagementSystem.Controllers
             return View();
         }
 
-        [HttpPost("Delete/{id}")]
+        //[HttpGet("Delete/{id}"]
+        //public IActionResult Delete(int id)
+        //{
+        //    return View();
+        //}
+
+        [HttpPost("Delete/{id}"), ActionName("Delete")]
+        //[ActionName("Delete")]
         public async Task<IActionResult> Delete(int id)
         {
             var accDetail = await _context.AccountDetails
-                //.AsNoTracking()
-                .SingleOrDefaultAsync(a => a.CustomerAccountId == id);
+                .AsNoTracking()
+                .SingleOrDefaultAsync(a => a.AccountDetailId == id);
 
-            if (accDetail == null)
-            {
-                return RedirectToAction(nameof(Index));
-            }
+            //if (accDetail == null)
+            //{
+            //    return RedirectToAction(nameof(Index));
+            //}
             
             try
             {
@@ -113,7 +121,7 @@ namespace TimeSheetManagementSystem.Controllers
                 ModelState.AddModelError("Fail", "Failed to delete Account Detail");
             }
 
-            return RedirectToAction(nameof(Index), new { id = id });
+            return RedirectToAction(nameof(Index));
         }
         //public IActionResult ManageAccountDetailsForOneCustomerAccount()
         //{

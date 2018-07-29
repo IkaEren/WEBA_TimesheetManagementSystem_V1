@@ -55,7 +55,7 @@
                     @Html.DisplayFor(modelItem => item.IsVisible)
                 </td>
                 <td>
-                    <a class="btn btn-warning btn-sm testBtn" role="button" data-toggle="modal" data-target=".testModal" data-id="@item.CustomerAccountId"> Delete </a>
+                    <a class="btn btn-warning btn-sm testBtn" role="button" data-toggle="modal" data-target=".testModal" data-id="@item.AccountDetailId"> Delete </a>
                 </td>
                 @*<td>
                     <a class="btn btn-warning pull-right" role="button" asp-action="Edit" asp-route-id="@item.AccountRateId" asp-route-customerid="@ViewBag.CustomerAccountId">Edit</a>
@@ -78,10 +78,16 @@
                 <p>Are you sure you want to delete the account detail for: </p>
             </div>
             <div class="modal-footer">
-                <a id="deleteBtn" asp-action="Delete" class="btn btn-danger">
+                <form asp-action="Delete" method="post" id="test">
+                    <div class="form-actions no-color">
+                        <input class="btn btn-danger" type="submit" value="Delete" />
+                        <a class="btn btn-default" role="button" data-dismiss="modal">Back to List</a>
+                    </div>
+                </form>
+                @*<a id="deleteBtn" asp-action="Delete" class="btn btn-danger">
                     Delete
                 </a>
-                <a class="btn btn-default" data-dismiss="modal" role="button">Close</a>
+                <a class="btn btn-default" data-dismiss="modal" role="button">Close</a>*@
             </div>
         </div>
     </div>
@@ -92,17 +98,18 @@
         $(document).ready(function () {
             $('.testBtn').click(function () {
                 var accId = $(this).data('id');//Get id of the synopsis that you want to delete
-                var accName = $(this).data('name');//Get name of the synopsis
+                //var accName = $(this).data('name');//Get name of the synopsis
                 console.log(accId);
-                console.log(accName);
+                //console.log(accName);
                 // set id to the hidden input field in the form.
-                $('#deleteAccount').text(accName);
+                //$('#deleteAccount').text(accName);
 
                 //Pass the id into
-                var $link = $('#deleteBtn');
-                var href = $link.attr('href').split('/');
-                href[3] = accId;
-                $link.attr('href', href.join('/'));
+                var $link = $('#test');
+                var test = $link.attr('action').split('/');
+                console.log(test[3])
+                test[4] = accId;
+                $link.attr('action', test.join('/'));
             });
         });
 
