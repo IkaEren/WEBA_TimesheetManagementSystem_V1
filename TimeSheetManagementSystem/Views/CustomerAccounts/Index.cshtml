@@ -73,11 +73,18 @@
                 @Html.DisplayFor(modelItem => item.UpdatedBy.FullName)
             </td>
             <td>
-                <a class="btn btn-warning pull-right" role="button" asp-action="Edit" asp-route-id="@item.CustomerAccountId">Edit</a>
-                <a class="btn btn-info pull-right" role="button" asp-action="Details" asp-route-id="@item.CustomerAccountId">Details</a>
-                <a class="btn btn-danger pull-right" role="button" asp-action="Index" asp-route-id="@item.CustomerAccountId" asp-controller="AccountDetails" asp-route-name="@item.AccountName">Account Details</a>
-                <a class="btn btn-danger pull-right" role="button" asp-action="Delete" asp-route-id="@item.CustomerAccountId">Delete</a>
-                <a class="btn btn-primary pull-right" role="button" asp-action="Index" asp-route-id="@item.CustomerAccountId" asp-controller="AccountRates">Account Rates</a>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Actions <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" role="button" asp-action="Edit" asp-route-id="@item.CustomerAccountId">Edit</a></li>
+                        <li><a class="dropdown-item" role="button" asp-action="Delete" asp-route-id="@item.CustomerAccountId">Delete</a></li>
+                        <li><a class="dropdown-item" role="button" asp-action="Index" asp-route-id="@item.CustomerAccountId" asp-controller="AccountRates">Account Rates</a></li>
+                        <li><a class="dropdown-item" role="button" asp-action="Index" asp-route-id="@item.CustomerAccountId" asp-controller="AccountDetails" asp-route-name="@item.AccountName">Account Details</a></li>
+                    </ul>
+                </div>
+               
             </td>
         </tr>
 }

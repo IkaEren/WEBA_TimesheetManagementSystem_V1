@@ -1,28 +1,40 @@
-@model IEnumerable<TimeSheetManagementSystem.Models.SessionSynopsis>
+@model PaginatedList<TimeSheetManagementSystem.Models.SessionSynopsis>
 
 @{
     ViewData["Title"] = "Manage Session Synposis";
 }
 
-<h2>Manage Session Synopsis</h2>
+<h2>Session Synopsis Management</h2>
 
 <p class="pull-right">
     <a class="btn btn-success" role="button" asp-action="Create">Create a new session synopsis</a>
 </p>
+
+<form method="get">
+    <div class="form-actions no-color">
+        <p>
+            Find by name:
+            <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
+            <input type="submit" value="Search" class="btn btn-default" />
+            <a asp-action="Index">Back to full list</a>
+        </p>
+    </div>
+</form>
+
 <table class="table">
     <thead>
         <tr>
                 <th>
-                    <label>Synopsis Name</label>
+                    <a asp-route-sortOrder="@ViewData["NameSort"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Synopsis Name</a>
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.IsVisible)
+                    <label>Is Visble</label>                
                 </th>
             <th>
-                @Html.DisplayNameFor(model => model.CreatedBy)
+                <a asp-route-sortOrder="@ViewData["CreatedBySort"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Created by</a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.UpdatedBy)
+                <a asp-route-sortOrder="@ViewData["UpdatedBySort"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Updated by</a>
             </th>
             <th></th>
         </tr>
@@ -43,15 +55,41 @@
                 @Html.DisplayFor(modelItem => item.UpdatedBy.FullName)
             </td>
             <td>
-                
-                <a class="btn btn-info pull-right" role="button" asp-action="Details" asp-route-id="@item.SessionSynopsisId">Details</a>
-                <a class="btn btn-warning pull-right" role="button" asp-action="Edit" asp-route-id="@item.SessionSynopsisId">Edit</a>
-                <a class="btn btn-danger pull-right" role="button" asp-action="Delete" asp-route-id="@item.SessionSynopsisId">Delete</a>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Actions <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        @*<li><a class="dropdown-item" role="button" asp-action="Details" asp-route-id="@item.SessionSynopsisId">Details</a></li>*@
+                        <li><a class="dropdown-item" role="button" asp-action="Edit" asp-route-id="@item.SessionSynopsisId"><span class="glyphicon glyphicon-edit" style="margin-right:8px"></span>Edit</a></li>
+                        <li><a class="dropdown-item" role="button" asp-action="Delete" asp-route-id="@item.SessionSynopsisId"><span class="glyphicon glyphicon-trash" style="margin-right:8px"></span>Delete</a></li>
+                    </ul>
+                </div>
             </td>
         </tr>
 }
     </tbody>
 </table>
+
+@{
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+}
+
+<a asp-action="Index"
+   asp-route-sortOrder="@ViewData["CurrentSort"]"
+   asp-route-pageIndex="@(Model.PageIndex - 1)"
+   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+   class="btn btn-default @prevDisabled">
+    Previous
+</a>
+<a asp-action="Index"
+   asp-route-sortOrder="@ViewData["CurrentSort"]"
+   asp-route-pageIndex="@(Model.PageIndex + 1)"
+   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+   class="btn btn-default @nextDisabled">
+    Next
+</a>
 
 @section scripts{ 
     <script>
@@ -61,7 +99,7 @@
                 var message = '@TempData["Success"]'
                 new Noty({
                     text: message,
-                    theme: 'metroui',
+                    theme: 'mint',
                     type: 'success',
                     timeout: 5000
                 }).show();

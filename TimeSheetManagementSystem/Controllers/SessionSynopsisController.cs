@@ -13,13 +13,12 @@ using System.Collections;
 
 namespace TimeSheetManagementSystem.Controllers
 {
-    [Produces("application/json")]
     [Route("api/[controller]")]
     public class SessionSynopsisController : Controller
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
-        private int? testId { get; set; }
+        //private int? testId { get; set; }
 
         public SessionSynopsisController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
@@ -29,31 +28,58 @@ namespace TimeSheetManagementSystem.Controllers
 
         // GET: SessionSynopsis
         [HttpGet("Index")]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string sortOrder, string searchString, string currentFilter, int? pageIndex)
         {
-            var applicationDbContext = _context.SessionSynopses.Include(s => s.CreatedBy).Include(s => s.UpdatedBy);
-            return View(await applicationDbContext.ToListAsync());
-        }
+            ViewData["CurrentSort"] = sortOrder;
+            ViewData["NameSort"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewData["CreatedBySort"] = sortOrder == "Created" ? "create_desc" : "Created";
+            ViewData["UpdatedBySort"] = sortOrder == "Updated" ? "update_desc" : "Updated";
 
-        // GET: SessionSynopsis/Details/5
-        [HttpGet("Details/{id}")]
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
+            if (searchString != null)
             {
-                return NotFound();
+                pageIndex = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
             }
 
-            var sessionSynopsis = await _context.SessionSynopses
-                .Include(s => s.CreatedBy)
-                .Include(s => s.UpdatedBy)
-                .SingleOrDefaultAsync(m => m.SessionSynopsisId == id);
-            if (sessionSynopsis == null)
+            ViewData["CurrentFilter"] = searchString;
+
+            var queryable = from s in _context.SessionSynopses.Include(s => s.CreatedBy).Include(s => s.UpdatedBy)
+                            select s;
+
+            if (!String.IsNullOrEmpty(searchString))
             {
-                return NotFound();
+                queryable = queryable.Where(s => s.SessionSynopsisName.Contains(searchString)
+                                            || s.CreatedBy.FullName.Contains(searchString)
+                                            || s.UpdatedBy.FullName.Contains(searchString));
             }
 
-            return View(sessionSynopsis);
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    queryable = queryable.OrderByDescending(s => s.SessionSynopsisName);
+                    break;
+                case "Created":
+                    queryable = queryable.OrderBy(s => s.CreatedBy.FullName);
+                    break;
+                case "create_desc":
+                    queryable = queryable.OrderByDescending(s => s.CreatedBy.FullName);
+                    break;
+                case "Updated":
+                    queryable = queryable.OrderBy(s => s.UpdatedBy.FullName);
+                    break;
+                case "update_desc":
+                    queryable = queryable.OrderByDescending(s => s.UpdatedBy.FullName);
+                    break;
+                default:
+                    queryable = queryable.OrderBy(c => c.SessionSynopsisName);
+                    break;
+            }
+
+            int pageSize = 5;
+            return View(await PaginatedList<SessionSynopsis>.CreateAsync(queryable.AsNoTracking(), pageIndex ?? 1, pageSize));
         }
 
         // GET: SessionSynopsis/Create
@@ -118,7 +144,7 @@ namespace TimeSheetManagementSystem.Controllers
                 return NotFound();
             }
 
-            testId = (id);
+            //testId = (id);
 
             var sessionSynopsis = await _context.SessionSynopses.SingleOrDefaultAsync(m => m.SessionSynopsisId == id);
 
@@ -198,14 +224,23 @@ namespace TimeSheetManagementSystem.Controllers
         }
 
         // POST: SessionSynopsis/Delete/5
-        [HttpPost("Delete/{id}")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        [HttpPost("Delete/{id}"),ActionName("Delete")]
+        //[ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(int id)
         {
-            var sessionSynopsis = await _context.SessionSynopses.SingleOrDefaultAsync(m => m.SessionSynopsisId == id);
-            _context.SessionSynopses.Remove(sessionSynopsis);
-            await _context.SaveChangesAsync();
-            TempData["Success"] = "The Session Synopsis has been deleted successfully";
+            var sessionSynopsis = await _context.SessionSynopses.AsNoTracking().SingleOrDefaultAsync(m => m.SessionSynopsisId == id);
+
+            try
+            {
+                _context.SessionSynopses.Remove(sessionSynopsis);
+                await _context.SaveChangesAsync();
+                TempData["Success"] = "The Session Synopsis has been deleted successfully";
+            }
+            catch
+            {
+                ModelState.AddModelError("Fail", "Failed to delete Session Synopsis");
+            }
+
             return RedirectToAction("Index");
         }
 
@@ -220,18 +255,31 @@ namespace TimeSheetManagementSystem.Controllers
             return _userManager.GetUserAsync(HttpContext.User);
         }
 
+        [AcceptVerbs("Get","Post")]
         // With reference to https://www.codeproject.com/Articles/1204076/ASP-NET-Core-MVC-Remote-Validation
-        public async Task<IActionResult> Verify([Bind("SessionSynopsisName")]SessionSynopsis test)
-        {
-            SessionSynopsis sessionSynopsis = await _context.SessionSynopses.SingleOrDefaultAsync(
-                s => s.SessionSynopsisName == test.SessionSynopsisName || s.SessionSynopsisId == testId);
-
-            if (sessionSynopsis == null)
+        // Edit page also can use cause of https://stackoverflow.com/questions/36122038/asp-net-mvc-remote-validation-logic-on-edit
+        public IActionResult Verify([Bind(nameof(SessionSynopsis.SessionSynopsisName),nameof(SessionSynopsis.SessionSynopsisId))]SessionSynopsis sessionSynopsis)
+       {
+            bool isViewNameValid;
+            if (sessionSynopsis.SessionSynopsisId == 0)
             {
-                return Json(true);
+                isViewNameValid = !_context.SessionSynopses.Any(x => x.SessionSynopsisName == sessionSynopsis.SessionSynopsisName);
+                if (isViewNameValid == false)
+                {
+                    return Json($"{sessionSynopsis.SessionSynopsisName} is already in use!");
+                }
+            }
+            else
+            {
+                isViewNameValid = !_context.SessionSynopses.Any(x => x.SessionSynopsisName == sessionSynopsis.SessionSynopsisName && x.SessionSynopsisId 
+                != sessionSynopsis.SessionSynopsisId);
             }
 
-            return Json($"{test.SessionSynopsisName} is already in use!");
+            return Json(isViewNameValid);
+            //if (sessionSynopsis == null)
+            //{
+            //    return Json(true);
+            //}
         }
     }
 }

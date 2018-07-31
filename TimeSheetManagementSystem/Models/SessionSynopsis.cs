@@ -16,9 +16,8 @@ namespace TimeSheetManagementSystem.Models
         // https://docs.microsoft.com/en-us/aspnet/core/mvc/models/validation?view=aspnetcore-2.1
         [RegularExpression(@"^[a-zA-Z0-9''-'\s]{1,100}$",ErrorMessage = "Please do not enter special characters.")]
         [Required(ErrorMessage = "Please enter a name for the session synopsis.")]
-        [Remote(action:"Verify",controller: "SessionSynopsis")]
+        [Remote(action:"Verify",controller: "SessionSynopsis",AdditionalFields = nameof(SessionSynopsisId))]
         public string SessionSynopsisName { get; set; }
-
         public int CreatedById { get; set; }
         public UserInfo CreatedBy { get; set; }
         public int UpdatedById { get; set; }

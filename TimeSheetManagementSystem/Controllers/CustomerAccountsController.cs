@@ -270,7 +270,7 @@ namespace TimeSheetManagementSystem.Controllers
             var customerAccount = await _context.CustomerAccounts.SingleOrDefaultAsync(m => m.CustomerAccountId == id);
             _context.CustomerAccounts.Remove(customerAccount);
             await _context.SaveChangesAsync();
-            TempData["Success"] = "The Customer Account has been updated successfully.";
+            TempData["Success"] = "The Customer Account has been deleted successfully.";
             return RedirectToAction("Index");
         }
 
