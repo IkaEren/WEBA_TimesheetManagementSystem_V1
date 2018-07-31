@@ -28,11 +28,12 @@ namespace TimeSheetManagementSystem.Models
 
         public string Comments { get; set; }
         public bool IsVisible { get; set; }
-        //[DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
+
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dddd, dd MMMM yyyy}")]
         public DateTime CreatedAt { get; set; }
         public int CreatedById { get; set; }
         public UserInfo CreatedBy { get; set; }
-        //[DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dddd, dd MMMM yyyy}")]
         public DateTime UpdatedAt { get; set; }
         public int UpdatedById { get; set; }
         public UserInfo UpdatedBy { get; set; }

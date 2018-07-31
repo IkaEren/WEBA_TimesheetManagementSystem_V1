@@ -27,10 +27,55 @@ namespace TimeSheetManagementSystem.Controllers
 
         [HttpGet("Index")]
         // GET: CustomerAccounts
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string sortOrder, string searchString, string currentFilter, int? pageIndex)
         {
-            var applicationDbContext = _context.CustomerAccounts.Include(c => c.CreatedBy).Include(c => c.UpdatedBy);
-            return View(await applicationDbContext.ToListAsync());
+            //Sorting for Name and CreatedAt 
+            ViewData["CurrentSort"] = sortOrder;
+            ViewData["NameSort"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewData["CreatedDateSort"] = sortOrder == "Date" ? "date_desc" : "Date";
+
+            if (searchString != null)
+            {
+                pageIndex = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+            ViewData["CurrentFilter"] = searchString;
+
+            var queryable = from c in _context.CustomerAccounts.Include(c => c.CreatedBy).Include(c => c.UpdatedBy)
+                            select c;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                queryable = queryable.Where(c => c.AccountName.Contains(searchString)
+                                            || c.CreatedAt.ToString("dd/MM/yyyy").Contains(searchString));
+            }
+
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    queryable = queryable.OrderByDescending(c => c.AccountName);
+                    break;
+                //case "name_aesc":
+                //    queryable = queryable.OrderBy(c => c.AccountName);
+                //    break;
+                case "Date":
+                    queryable = queryable.OrderBy(c => c.CreatedAt);
+                    break;
+                case "date_desc":
+                    queryable = queryable.OrderByDescending(c => c.CreatedAt);
+                    break;
+                default:
+                    queryable = queryable.OrderBy(c => c.AccountName);
+                    break;
+            }
+
+            int pageSize = 5;
+            //var applicationDbContext = _context.CustomerAccounts.Include(c => c.CreatedBy).Include(c => c.UpdatedBy);
+            return View(await PaginatedList<CustomerAccount>.CreateAsync(queryable.AsNoTracking(), pageIndex ?? 1, pageSize));
         }
 
         [HttpGet("Index/{id}")]

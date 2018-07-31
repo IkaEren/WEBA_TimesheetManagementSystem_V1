@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using TimeSheetManagementSystem.Models;
 using ReflectionIT.Mvc.Paging;
 using Microsoft.AspNetCore.Identity;
+using TimeSheetManagementSystem.Models.AccountDetailViewModels;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -28,18 +29,18 @@ namespace TimeSheetManagementSystem.Controllers
         [HttpGet("Index/{id}")]
         public async Task<IActionResult> Index(int id, int page = 1)
         {
-            IOrderedQueryable<AccountDetail> test = _context.AccountDetails.Where(a => a.CustomerAccountId == id).OrderBy(x => x.AccountDetailId).Select(acc => new AccountDetail
+            IOrderedQueryable<IndexAccountDetails> test = _context.AccountDetails.Where(a => a.CustomerAccountId == id).OrderBy(x => x.AccountDetailId).Select(acc => new IndexAccountDetails
             {
                 IsVisible = acc.IsVisible,
                 EffectiveStartDate = acc.EffectiveStartDate,
                 EffectiveEndDate = acc.EffectiveEndDate,
-                StartTimeInMinutes = acc.StartTimeInMinutes,
-                EndTimeInMinutes = acc.EndTimeInMinutes,
-                DayOfWeekNumber = acc.DayOfWeekNumber,
+                StartTimeInMinutes = ConvertMinToTime(acc.StartTimeInMinutes),
+                EndTimeInMinutes = ConvertMinToTime(acc.EndTimeInMinutes),
+                DayOfWeek = SetDay(acc.DayOfWeekNumber),
                 AccountDetailId = acc.AccountDetailId
-            }).OrderBy(x => x.DayOfWeekNumber);
+            }).OrderBy(x => x.DayOfWeek);
 
-            var model = await PagingList<AccountDetail>.CreateAsync(test, 10, page);
+            var model = await PagingList<IndexAccountDetails>.CreateAsync(test, 10, page);
 
             ViewBag.customerId = id;
             return View(model);
@@ -121,7 +122,46 @@ namespace TimeSheetManagementSystem.Controllers
                 ModelState.AddModelError("Fail", "Failed to delete Account Detail");
             }
 
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Index),new { id = accDetail.CustomerAccountId });
+        }
+
+        private string SetDay(int i)
+        {
+            string day;
+            switch (i)
+            {
+                case 1:
+                    day = "Monday";
+                    return day;
+                case 2:
+                    day = "Tuesday";
+                    return day;
+                case 3:
+                    day = "Wednesday";
+                    return day;
+                case 4:
+                    day = "Thursday";
+                    return day;
+                case 5:
+                    day = "Friday";
+                    return day;
+                case 6:
+                    day = "Saturday";
+                    return day;
+                case 7:
+                    day = "Sunday";
+                    return day;
+                default:
+                    day = "";
+                    return day;
+            }
+        }
+
+        private string ConvertMinToTime(int i)
+        {
+            TimeSpan time = TimeSpan.FromMinutes(i);
+            string actualTime = time.ToString(@"hh\:mm");
+            return actualTime;
         }
         //public IActionResult ManageAccountDetailsForOneCustomerAccount()
         //{

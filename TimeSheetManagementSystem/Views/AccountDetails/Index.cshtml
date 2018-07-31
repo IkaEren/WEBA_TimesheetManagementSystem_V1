@@ -1,4 +1,4 @@
-@model IEnumerable<TimeSheetManagementSystem.Models.AccountDetail>
+@model IEnumerable<TimeSheetManagementSystem.Models.AccountDetailViewModels.IndexAccountDetails>
 
 @{
     ViewData["Title"] = "Index";
@@ -13,7 +13,7 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.DayOfWeekNumber)
+                @Html.DisplayNameFor(model => model.DayOfWeek)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.EffectiveStartDate)
@@ -37,7 +37,7 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.DayOfWeekNumber)
+                    @Html.DisplayFor(modelItem => item.DayOfWeek)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.EffectiveStartDate)
